@@ -1,0 +1,12 @@
+{
+  "DocVersion": "1.0.0",
+  "StudioMinVersion": "2025.10.0",
+  "SolutionId": "a5e15f9f-458d-4754-b222-d8fb29f4372e",
+  "Projects": [
+    {
+      "Type": "Flow",
+      "ProjectRelativePath": "solution-ci-fixture-flow/project.uiproj",
+      "Id": "96154b4c-b474-4528-80b6-b93e78c1c3af"
+    }
+  ]
+}

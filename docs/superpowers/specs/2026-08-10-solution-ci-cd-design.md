@@ -17,11 +17,10 @@ solution from `github.run_number`, retains the package and command logs, and
 uses the `playground-deploy` Environment exclusively in its deployment job.
 
 The validation workflow never authenticates to UiPath, reads environment
-secrets, publishes, or deploys. It runs `uip solution resources refresh`,
-`restore`, and `pack --dry-run` for every changed solution. The deployment
-workflow runs the same preparation steps, packs once, publishes that exact
-archive, deploys it below `JD/demos`, and queries deployment status using the
-returned pipeline deployment id.
+secrets, publishes, or deploys. It validates changed Flow files and solution
+manifests locally. The deployment workflow performs `resources refresh`,
+restore, pack, publish, deploy, and status verification after authenticating,
+then deploys the exact packed archive below `JD/demos`.
 
 ## Fixture and inputs
 
