@@ -33,6 +33,7 @@ uip solution pack <solution-folder> --dry-run
 
 ## Delivery
 
-Pull requests validate changed solutions. After merge to `main`, CI publishes
-each immutable package version once and promotes that same package through the
-`dev`, `staging`, and `prod` GitHub Environments.
+Pull requests validate changed Flow and solution manifests without UiPath
+credentials. After merge to `main`, the `playground-deploy` Environment can
+refresh, package, publish, deploy, and verify explicitly registered solutions
+to UiPath Labs Playground. See [the deployment guide](.github/PLAYGROUND_DEPLOYMENT.md).

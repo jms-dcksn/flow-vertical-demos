@@ -1,0 +1,59 @@
+name: UiPath solution CI/CD
+
+on:
+  pull_request:
+    paths: ['**']
+  push:
+    branches: [main]
+    paths: ['**']
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      validation_matrix: ${{ steps.matrix.outputs.validation_matrix }}
+      deployment_matrix: ${{ steps.matrix.outputs.deployment_matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - id: matrix
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed-files.txt
+          changed='[]'
+          while IFS= read -r manifest; do
+            root=${manifest#./}; root=${root%/*.uipx}
+            if grep -q "^${root}/" changed-files.txt; then changed=$(jq --arg path "$root" '. + [{solution_path: $path}]' <<<"$changed"); fi
+          done < <(find . -name '*.uipx' -type f)
+          validation=$(jq -cn --argjson entries "$changed" '{include: $entries}')
+          deployment=$(jq -c --argjson changed "$changed" '{include: [.solutions[] | select(.solution_path as $path | $changed | map(.solution_path) | index($path))]}' .github/uipath-deployments.json)
+          echo "validation_matrix=$validation" >> "$GITHUB_OUTPUT"
+          echo "deployment_matrix=$deployment" >> "$GITHUB_OUTPUT"
+  validate:
+    if: github.event_name == 'pull_request'
+    needs: discover
+    strategy:
+      matrix: ${{ fromJSON(needs.discover.outputs.validation_matrix) }}
+    uses: ./.github/workflows/validate-uipath-solution.yml
+    with:
+      solution_path: ${{ matrix.solution_path }}
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: discover
+    strategy:
+      matrix: ${{ fromJSON(needs.discover.outputs.deployment_matrix) }}
+    uses: ./.github/workflows/deploy-uipath-solution.yml
+    with:
+      solution_path: ${{ matrix.solution_path }}
+      package_name: ${{ matrix.package_name }}
+      package_version: 1.0.${{ github.run_number }}
+      deployment_name: ${{ matrix.deployment_name }}-${{ github.run_number }}
+      folder_name: ${{ matrix.folder_name }}
+      deployment_config: ${{ matrix.deployment_config }}

@@ -1,0 +1,37 @@
+name: Validate UiPath solution
+
+on:
+  workflow_call:
+    inputs:
+      solution_path:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --global @uipath/cli
+      - name: Validate solution manifests and Flows without UiPath credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p logs
+          jq empty "${{ inputs.solution_path }}"/*.uipx | tee logs/solution-manifest.log
+          while IFS= read -r -d '' flow; do
+            uip maestro flow validate "$flow" --output json | tee -a logs/flow-validation.log
+          done < <(find "${{ inputs.solution_path }}" -name '*.flow' -print0)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-logs
+          path: logs/
+          if-no-files-found: warn
+          retention-days: 14
