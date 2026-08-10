@@ -54,14 +54,15 @@ updated deliberately.
   solution, then restore/pack as appropriate.
 - The deploy path is `pack` -> `publish` -> `deploy run`; `solution upload` is
   only for Studio Web editing/debugging and is not a deployment path.
-- Package once and promote the same version using per-environment deploy configs.
-  Do not create a separate solution per environment.
+- Deploy demo solutions to the UiPath Labs `Playground` tenant, under the
+  `JD/demos` parent folder. Do not create environment-specific solutions.
 - CI must operate per changed solution folder using GitHub Actions path filters
   or a changed-solution matrix.
 - Pull requests validate affected solutions. Publishing and deployment run only
-  after merge to `main`, through GitHub Environments (`dev`, `staging`, `prod`).
-- Store UiPath client credentials and environment values in GitHub Environment
-  secrets, never in Flow files, deploy configs, or the repository.
+  after a push to `main`, through the `playground-deploy` GitHub Environment.
+- Store `UIPATH_CLIENT_ID` and `UIPATH_CLIENT_SECRET` in the
+  `playground-deploy` GitHub Environment. Keep the UiPath URL, tenant, folder,
+  and other non-secret deployment configuration in the repository.
 - Use an immutable, unique package version for every publish; the solution feed
   rejects duplicate name/version pairs.
 
