@@ -1,0 +1,65 @@
+name: Demo specification
+description: Define an initial design for a vertical demo solution.
+title: "[Demo spec]: "
+labels:
+  - "type: specification"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when research is sufficient to define a focused demo design and its mapping to the reference solution.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Domain or shared area
+      options:
+        - commercial-banking
+        - consumer-banking
+        - healthcare-payer
+        - healthcare-provider
+        - life-insurance
+        - medtech
+        - p-c-insurance
+        - pharma
+        - retail
+        - reference-solution
+        - repository-wide
+    validations:
+      required: true
+  - type: input
+    id: solution_scope
+    attributes:
+      label: Solution scope
+      description: Name the domain/demo solution this specification covers.
+      placeholder: commercial-banking/payment-exception
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: State the use case, demo behavior, required artifacts, and reference-solution mapping.
+      placeholder: |
+        - The enterprise use case is defined.
+        - The initial demo design is documented.
+        - The design maps to the reference solution structure.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List each dependency as `blocked-by #<issue>`, or write `None`.
+      placeholder: blocked-by #1
+    validations:
+      required: true
+  - type: dropdown
+    id: readiness
+    attributes:
+      label: Readiness state
+      description: Select the state that should apply after triage confirms the issue is complete.
+      options:
+        - ready for agent
+        - ready for human
+    validations:
+      required: true

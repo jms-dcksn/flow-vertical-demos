@@ -1,0 +1,64 @@
+name: Decision or access request
+description: Request a product, technical, security, or access decision from a human owner.
+title: "[Decision/access]: "
+labels:
+  - "type: governance"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when progress requires a human decision, approval, credential, or external access grant.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Domain or shared area
+      options:
+        - commercial-banking
+        - consumer-banking
+        - healthcare-payer
+        - healthcare-provider
+        - life-insurance
+        - medtech
+        - p-c-insurance
+        - pharma
+        - retail
+        - reference-solution
+        - repository-wide
+    validations:
+      required: true
+  - type: input
+    id: solution_scope
+    attributes:
+      label: Solution scope
+      description: Name the affected solution or shared capability.
+      placeholder: healthcare-payer/prior-authorization
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: State the decision or access outcome needed, the responsible owner, and the evidence required to resolve it.
+      placeholder: |
+        - The required decision or access grant is recorded.
+        - The dependent work can proceed.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List each dependency as `blocked-by #<issue>`, or write `None`.
+      placeholder: blocked-by #24
+    validations:
+      required: true
+  - type: dropdown
+    id: readiness
+    attributes:
+      label: Readiness state
+      description: Decision and access requests normally become `ready for human` after triage.
+      options:
+        - ready for agent
+        - ready for human
+    validations:
+      required: true

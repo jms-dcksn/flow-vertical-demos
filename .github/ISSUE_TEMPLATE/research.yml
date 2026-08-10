@@ -1,0 +1,64 @@
+name: Research
+description: Request structured domain, market, or capability research.
+title: "[Research]: "
+labels:
+  - "type: research"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for evidence-led research that will inform a vertical demo recommendation or design.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Domain or shared area
+      options:
+        - commercial-banking
+        - consumer-banking
+        - healthcare-payer
+        - healthcare-provider
+        - life-insurance
+        - medtech
+        - p-c-insurance
+        - pharma
+        - retail
+        - reference-solution
+        - repository-wide
+    validations:
+      required: true
+  - type: input
+    id: solution_scope
+    attributes:
+      label: Solution scope
+      description: Name the target demo solution, or write "Research only" if no solution has been selected.
+      placeholder: commercial-banking/payment-exception
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: State the evidence, recommendation, and artifacts this research must produce.
+      placeholder: |
+        - Sources and findings are recorded.
+        - A recommended enterprise use case is identified.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List each dependency as `blocked-by #<issue>`, or write `None`.
+      placeholder: None
+    validations:
+      required: true
+  - type: dropdown
+    id: readiness
+    attributes:
+      label: Readiness state
+      description: Select the state that should apply after triage confirms the issue is complete.
+      options:
+        - ready for agent
+        - ready for human
+    validations:
+      required: true
