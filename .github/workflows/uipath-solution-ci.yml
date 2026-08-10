@@ -32,8 +32,8 @@ jobs:
             root=${manifest#./}; root=${root%/*.uipx}
             if grep -q "^${root}/" changed-files.txt; then changed=$(jq --arg path "$root" '. + [{solution_path: $path}]' <<<"$changed"); fi
           done < <(find . -name '*.uipx' -type f)
-          validation=$(jq -n --argjson entries "$changed" '{include: $entries}')
-          deployment=$(jq --argjson changed "$changed" '{include: [.solutions[] | select(.solution_path as $path | $changed | map(.solution_path) | index($path))]}' .github/uipath-deployments.json)
+          validation=$(jq -cn --argjson entries "$changed" '{include: $entries}')
+          deployment=$(jq -c --argjson changed "$changed" '{include: [.solutions[] | select(.solution_path as $path | $changed | map(.solution_path) | index($path))]}' .github/uipath-deployments.json)
           echo "validation_matrix=$validation" >> "$GITHUB_OUTPUT"
           echo "deployment_matrix=$deployment" >> "$GITHUB_OUTPUT"
   validate:
