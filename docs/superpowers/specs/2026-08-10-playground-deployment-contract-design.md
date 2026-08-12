@@ -12,7 +12,7 @@ scope in issue #5: these demos have one deployment target.
 | --- | --- |
 | UiPath organization | UiPath Labs (`https://cloud.uipath.com`) |
 | Tenant | `Playground` |
-| Orchestrator folder | `JD/demos` |
+| Orchestrator folder | `JD_Demos/demos` |
 | GitHub Environment | `playground-deploy` |
 | Deployment trigger | Push to `main` only |
 
@@ -24,7 +24,7 @@ UiPath, publish a package, or deploy it.
 GitHub Actions signs in with a dedicated OAuth client, not a person's account.
 The UiPath Labs tenant administrator creates or identifies that client and
 grants it only the permissions required to publish and deploy solutions in the
-`JD/demos` folder. The repository administrator owns the GitHub Environment and
+`JD_Demos/demos` folder. The repository administrator owns the GitHub Environment and
 its secrets.
 
 The `playground-deploy` environment contains these GitHub Actions secrets:
@@ -46,7 +46,7 @@ other credential values.
 Issue #4 owns the reusable GitHub Actions workflow. That workflow will select
 the `playground-deploy` environment only for its push-to-`main` publish/deploy
 job, read the two secrets above, sign in to `Playground`, and deploy changed
-solutions to `JD/demos`.
+solutions to `JD_Demos/demos`.
 
 ## Failure handling
 
@@ -57,7 +57,7 @@ configuration by name without revealing secret values.
 ## Acceptance checks
 
 1. The target URL, tenant, folder, and GitHub Environment are explicit.
-2. A dedicated OAuth client is required and is scoped to `JD/demos`.
+2. A dedicated OAuth client is required and is scoped to `JD_Demos/demos`.
 3. The required GitHub secrets and their role owners are explicit.
 4. The repository's secret/non-secret boundary is explicit.
 5. Issue #4 has an unambiguous deployment contract to implement.

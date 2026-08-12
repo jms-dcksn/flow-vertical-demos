@@ -4,7 +4,7 @@
 
 **Goal:** Establish one GitHub Environment and a concise repository contract for automated deployment of demo solutions to UiPath Playground.
 
-**Architecture:** A GitHub Environment named `playground-deploy` isolates the OAuth credentials outside the repository. Repository instructions and a short setup guide fix the non-secret target (`https://cloud.uipath.com`, `Playground`, `JD/demos`) and tell the future reusable workflow in issue #4 when it may use that environment.
+**Architecture:** A GitHub Environment named `playground-deploy` isolates the OAuth credentials outside the repository. Repository instructions and a short setup guide fix the non-secret target (`https://cloud.uipath.com`, `Playground`, `JD_Demos/demos`) and tell the future reusable workflow in issue #4 when it may use that environment.
 
 **Tech Stack:** GitHub Environments, GitHub Actions secrets, UiPath CLI contract, Markdown.
 
@@ -12,7 +12,7 @@
 
 - Deploy only after a push to `main`; pull requests never authenticate to UiPath or deploy.
 - Use one `playground-deploy` GitHub Environment with no deployment approval gate.
-- The target is `https://cloud.uipath.com`, tenant `Playground`, folder `JD/demos`.
+- The target is `https://cloud.uipath.com`, tenant `Playground`, folder `JD_Demos/demos`.
 - Store `UIPATH_CLIENT_ID` and `UIPATH_CLIENT_SECRET` only as GitHub Environment secrets.
 - The repository may contain only non-secret target and package configuration.
 
@@ -61,7 +61,7 @@ Do not create fake secrets. The repository administrator adds `UIPATH_CLIENT_ID`
 
 - [ ] **Step 1: Update the CI/CD rules in `AGENTS.md`**
 
-Replace the multi-environment promotion wording with the single `Playground` target, the `JD/demos` parent folder, and `playground-deploy` Environment. Keep the required `resources refresh`, `pack`, `publish`, and `deploy run` lifecycle. State that only pushes to `main` can publish or deploy.
+Replace the multi-environment promotion wording with the single `Playground` target, the `JD_Demos/demos` parent folder, and `playground-deploy` Environment. Keep the required `resources refresh`, `pack`, `publish`, and `deploy run` lifecycle. State that only pushes to `main` can publish or deploy.
 
 - [ ] **Step 2: Add `.github/PLAYGROUND_DEPLOYMENT.md`**
 
@@ -69,7 +69,7 @@ Document the exact target, the two secret names, their role owners, the safe/non
 
 - [ ] **Step 3: Verify the documentation contract**
 
-Run: `rg -n 'playground-deploy|Playground|JD/demos|UIPATH_CLIENT_ID|UIPATH_CLIENT_SECRET|push to `main`' AGENTS.md .github/PLAYGROUND_DEPLOYMENT.md`
+Run: `rg -n 'playground-deploy|Playground|JD_Demos/demos|UIPATH_CLIENT_ID|UIPATH_CLIENT_SECRET|push to `main`' AGENTS.md .github/PLAYGROUND_DEPLOYMENT.md`
 
 Expected: all required target and secret strings appear in the repository instructions and setup guide.
 

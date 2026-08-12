@@ -38,7 +38,7 @@ jobs:
           uip solution pack "${{ inputs.solution_path }}" package --name "${{ inputs.package_name }}" --version "${{ inputs.package_version }}" --output json | tee logs/pack.json
           package_path="package/${{ inputs.package_name }}.${{ inputs.package_version }}.zip"
           uip solution publish "$package_path" --output json | tee logs/publish.json
-          uip solution deploy run --name "${{ inputs.deployment_name }}" --package-name "${{ inputs.package_name }}" --package-version "${{ inputs.package_version }}" --folder-name "${{ inputs.folder_name }}" --parent-folder-path JD/demos --config-file "${{ inputs.deployment_config }}" --output json | tee logs/deploy-run.json
+          uip solution deploy run --name "${{ inputs.deployment_name }}" --package-name "${{ inputs.package_name }}" --package-version "${{ inputs.package_version }}" --folder-name "${{ inputs.folder_name }}" --parent-folder-path JD_Demos/demos --config-file "${{ inputs.deployment_config }}" --output json | tee logs/deploy-run.json
           pipeline_id=$(jq -r '.Data.PipelineDeploymentId' logs/deploy-run.json)
           test "$pipeline_id" != null
           uip solution deploy status "$pipeline_id" --output json | tee logs/deploy-status.json

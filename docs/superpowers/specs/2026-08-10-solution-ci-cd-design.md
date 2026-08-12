@@ -20,7 +20,7 @@ The validation workflow never authenticates to UiPath, reads environment
 secrets, publishes, or deploys. It validates changed Flow files and solution
 manifests locally. The deployment workflow performs `resources refresh`,
 restore, pack, publish, deploy, and status verification after authenticating,
-then deploys the exact packed archive below `JD/demos`.
+then deploys the exact packed archive below `JD_Demos/demos`.
 
 ## Fixture and inputs
 
@@ -43,7 +43,7 @@ both package and logs are uploaded on success or failure.
 Live deployment remains blocked by #34. Each real solution must supply a
 stable package name, deploy configuration, and folder-name convention before
 being added to the deployment matrix. `uip solution deploy run` creates its
-solution folder beneath `JD/demos`; it is not an in-place update of an
+solution folder beneath `JD_Demos/demos`; it is not an in-place update of an
 arbitrary existing folder.
 
 ## Verification

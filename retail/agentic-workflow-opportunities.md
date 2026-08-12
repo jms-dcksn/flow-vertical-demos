@@ -415,7 +415,7 @@ improvements without retailer baselines.
 | Purposeful parallelism and merge | Stop-sale, quarantine, communication/remedy branches merge before reconciliation. | Designed; missing receipt blocks success. |
 | Evaluation set and evaluator | Five cases; deterministic route/count checks, tool-call evaluator, grounded-draft judge. | Threshold calibration awaits implementation. |
 | Process-app variant | Not selected. | Selection belongs to a later cross-domain decision. |
-| Solution boundary and delivery | One globally unique `retail-product-recall-containment` package; exactly one `.uipx`; nested Flow project; resource refresh before restore/pack; immutable version; changed-solution CI; publish/deploy only after `main` to Playground `JD/demos`. | Repository contract inherited; solution not created in this research issue. |
+| Solution boundary and delivery | One globally unique `retail-product-recall-containment` package; exactly one `.uipx`; nested Flow project; resource refresh before restore/pack; immutable version; changed-solution CI; publish/deploy only after `main` to Playground `JD_Demos/demos`. | Repository contract inherited; solution not created in this research issue. |
 
 ### Design quality rubric
 

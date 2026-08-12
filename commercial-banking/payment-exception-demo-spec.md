@@ -25,7 +25,7 @@ The initial build uses a manual trigger for repeatable demonstration. A webhook 
 | Item | Specification |
 | --- | --- |
 | Trigger | Manual Flow trigger accepting the `PaymentExceptionInput` object below. The API workflow validates the raw `camt.110`-like investigation and produces the canonical case. |
-| Canonical record | Orchestrator queue `CommercialBankingPaymentExceptions`, with unique reference `<caseId>:<uetr>`. Queue specific-content stores the synthetic case and current state; output data stores the final decision and receipts. The deployed folder is a child of `JD/demos` chosen during implementation. |
+| Canonical record | Orchestrator queue `CommercialBankingPaymentExceptions`, with unique reference `<caseId>:<uetr>`. Queue specific-content stores the synthetic case and current state; output data stores the final decision and receipts. The deployed folder is a child of `JD_Demos/demos` chosen during implementation. |
 | Required inputs | `caseId`, `uetr`, `investigationMessage`, `originalPayment`, `networkStatus`, `customerRiskContext`, `screeningResult`, `policyVersion`, and `receivedAt`. All values are synthetic; account and party identifiers are masked in tasks and logs. |
 | Outputs | Classification, deterministic findings, cited evidence summary, advisory recommendation, reviewer outcome, `camt.111`-like response, mock write-back receipts, final status, and append-only audit events. |
 
@@ -105,7 +105,7 @@ commercial-banking/payment-exception/
 └── payment-exception-review/
 ```
 
-The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed if required by the platform, while its contract and version are pinned by the solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and run a dry-run pack. Pull requests validate only the changed solution. Publishing and deployment occur after merge to `main` through `playground-deploy`, using an immutable package version and a child folder beneath `JD/demos`.
+The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed if required by the platform, while its contract and version are pinned by the solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and run a dry-run pack. Pull requests validate only the changed solution. Publishing and deployment occur after merge to `main` through `playground-deploy`, using an immutable package version and a child folder beneath `JD_Demos/demos`.
 
 ## Human decisions
 
@@ -206,7 +206,7 @@ These decisions refine implementation but do not block building the synthetic, m
 | Confirm response deadlines and escalation SLA. | Payment operations owner | Replace the 30-minute demo timeout with the approved test policy for the selected exception types. |
 | Choose representative systems and prove whether UI automation is necessary. | Enterprise architect and application owners | Review API availability; retain RPA only for a demonstrably UI-only responsibility. |
 | Approve policy corpus, retention, residency, and redaction. | Policy, privacy, and records owners | Sign off the synthetic corpus and environment controls before non-synthetic testing. |
-| Select the exact `JD/demos` child folder and provision remaining resources. | UiPath tenant administrator | Reuse the verified Azure AI Foundry connection, discover or create the other approved resources, and record every binding in the solution. |
+| Select the exact `JD_Demos/demos` child folder and provision remaining resources. | UiPath tenant administrator | Reuse the verified Azure AI Foundry connection, discover or create the other approved resources, and record every binding in the solution. |
 | Decide whether commercial banking is one of the three Data Fabric/process-app variants. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this initial spec marks the variant not selected. |
 
 ## Implementation tasks
