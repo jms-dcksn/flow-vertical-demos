@@ -28,7 +28,7 @@ The initial build uses a manual Flow trigger for repeatable demonstrations. A no
 | Item | Specification |
 | --- | --- |
 | Trigger | Manual Flow trigger accepting `EftDisputeInput`. The `dispute-evidence-gateway` API workflow validates the input, normalises transaction and evidence references, and produces the canonical case. |
-| Canonical record | Orchestrator queue `ConsumerBankingEftDisputes`, unique reference `caseId`. Queue specific-content stores the synthetic case and state; output data stores the reviewed decision, receipts, notifications, and final audit summary. The deployment folder is a child of the repository-approved demo parent after the `JD/demos` versus tenant path `JD_Demos/demos` mismatch is resolved. |
+| Canonical record | Orchestrator queue `ConsumerBankingEftDisputes`, unique reference `caseId`. Queue specific-content stores the synthetic case and state; output data stores the reviewed decision, receipts, notifications, and final audit summary. Deploy the solution to a child folder beneath the approved `JD_Demos/demos` parent. |
 | Required inputs | Notice metadata, tokenised customer and account references, disputed transactions, untrusted consumer statement, and scanned synthetic attachments with immutable evidence metadata. |
 | Outputs | Source-linked case summary, advisory coverage and risk assessments, deterministic deadline plan, human decision, optional credit instruction, notification records, system receipts, final status, and audit record. |
 
@@ -80,7 +80,7 @@ Use four blue sticky notes with the titles below. The happy path runs left to ri
 
 | Actor | Contract and readiness |
 | --- | --- |
-| Trigger | Manual `EftDisputeInput` event; `caseId` is correlation/idempotency; target is a child of the approved demo parent. The exact folder remains unresolved because the repository says `JD/demos` while the authenticated tenant reports `JD_Demos/demos`. |
+| Trigger | Manual `EftDisputeInput` event; `caseId` is correlation/idempotency; target is a child folder beneath the approved `JD_Demos/demos` parent. |
 | IXP | `ConsumerBankingDisputeIntakeExtraction` consumes a scanned synthetic dispute form and extracts consumer/account tokens, transaction IDs/dates/amounts, received date, allegation, and signature-presence flag with evidence locations. Confidence below `0.85` or a required-field conflict forces corrected intake. No model is provisioned; a versioned extraction fixture is the build fallback. |
 | API workflow | `dispute-evidence-gateway` operations `normalise_intake`, `get_transaction_evidence`, `write_case_status`, `render_notice`, and `deliver_notice_preview` return typed results and receipts. It is a new sibling project backed by repository mocks; no live bank connection is assumed. |
 | RPA | `legacy-deposit-adjustment-console` operations `read_account_status` and `record_credit` target a local legacy-screen simulator with no API. `record_credit` accepts only reviewed instruction fields and returns a receipt; ambiguous writes are never retried automatically. The production API gap is unverified. |
@@ -134,7 +134,7 @@ consumer-banking/eft-dispute-resolution/
 └── eft-dispute-review/
 ```
 
-The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed where required, with its versioned action contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version and a resolved child folder beneath the approved demo parent.
+The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed where required, with its versioned action contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version and a child folder beneath the approved `JD_Demos/demos` parent.
 
 ## Human decisions
 
@@ -227,7 +227,7 @@ Dataset name: `consumer-banking-eft-dispute-resolution-v1`.
 | Purposeful parallelism and merge | Route-specific financial action, case write-back, and notice preview merge before receipts and closure. | Fully specified; required-receipt matrix remains to encode. |
 | Evaluation set and evaluator | Five fixtures plus route/deadline, grounding, trajectory, pre-write, isolation, and reconciliation evaluators. | Initial thresholds are exact; fixtures/evaluators remain to build. |
 | Process-app variant | Not selected. Orchestrator queue is the canonical record. | Later cross-domain selection may change the design. |
-| Solution boundary and delivery contract | One `consumer-banking-eft-dispute-resolution` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, and changed-solution CI. | Fully specified; deployment folder mismatch and unprovisioned resources remain owned gaps. |
+| Solution boundary and delivery contract | One `consumer-banking-eft-dispute-resolution` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI, and deployment beneath `JD_Demos/demos`. | Fully specified; tenant resources other than the Azure showcase connection remain unprovisioned. |
 
 ## Open human decisions
 
@@ -241,7 +241,6 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 | Select the canonical system and process-app variant. | Enterprise architect and demo portfolio owner | Confirm the queue design and that this domain is not one of the later Data Fabric/process-app variants, or revise the canonical record before implementation. |
 | Validate the legacy API gap and RPA responsibility. | Core deposit owner and enterprise architect | Retain RPA only if the chosen operation lacks a governed API; otherwise select a credible UI-only step or approve a reference deviation. |
 | Approve reviewer experience and timeout. | Disputes operations and UiPath task owners | Approve coded action app fields, roles, second approval, named outcomes, reassignment, and replace the 30-minute demo timeout where needed. |
-| Resolve the deployment-folder mismatch. | Repository owner and UiPath tenant administrator | Reconcile repository target `JD/demos` with authenticated Playground path `JD_Demos/demos`, then choose the exact child folder and record its key. |
 | Provision and approve tenant resources. | UiPath tenant administrator and resource owners | Reuse the verified Azure connection; provision queue, IXP, agents, context, MCP server, action app, runtime, notification sink, and least-privilege identities. |
 | Supply safe fixtures and operational baselines. | Data/privacy and disputes operations owners | Approve synthetic transaction/document edge cases and provide observed timing, touches, errors, reopen, and timeliness baselines before benefit claims. |
 
@@ -256,7 +255,7 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 7. Author the four-segment Flow, deterministic deadline logic, real branch expressions, isolated Azure showcase, parallel action branches, merge, and reconciliation.
 8. Validate the Azure binding and prove that off, on, timeout, error, and unexpected-response variants cannot change core business data or route.
 9. Validate every project, resolve all warnings, and run the five-case evaluation set plus isolation permutations against the specified thresholds.
-10. Refresh solution resources, restore, dry-run pack, and register immutable deployment configuration after the folder path and child folder are approved.
+10. Select and record the solution child folder beneath `JD_Demos/demos`, then refresh solution resources, restore, dry-run pack, and register immutable deployment configuration.
 
 ## Quality rubric
 
@@ -265,5 +264,5 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 | Enterprise credibility | 2 | Consequential dispute decision, public regulatory evidence, roles, data, controls, and measures are explicit; bank policy, systems, authority, and baselines remain unverified. | Legal/compliance, disputes, and system owners validate before non-synthetic use. |
 | Flow differentiation | 3 | Four segments visibly coordinate IXP, rules, two agents/tools, API, RPA, human decisions, isolated external connectivity, parallel actions, merge, and recovery. | Flow implementer preserves the topology and validates all expressions. |
 | Demo clarity | 3 | A source-linked review hero moment, approved-credit journey, ambiguity/dependency exceptions, and observable receipts form a timed script. | Demo owner selects representative fixtures and rehearses after deployment. |
-| Build feasibility | 2 | Contracts, mock fallbacks, solution boundary, evaluation thresholds, authenticated target, and verified Azure resource are recorded; most resources and the folder convention remain unresolved. | Tenant administrator and implementers provision resources after folder approval and record every binding. |
+| Build feasibility | 2 | Contracts, mock fallbacks, solution boundary, evaluation thresholds, authenticated target, approved `JD_Demos/demos` parent, and verified Azure resource are recorded; most resources remain unprovisioned. | Tenant administrator and implementers provision resources and record every binding. |
 | **Total** | **10/12** | **Ready for implementation planning as a synthetic demo; not ready for production policy, integration, real account action, or customer communication.** | **Start with solution/fixtures and close owned decisions before replacing mocks.** |

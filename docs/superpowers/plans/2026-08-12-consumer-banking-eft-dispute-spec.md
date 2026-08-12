@@ -16,7 +16,7 @@
 - Use synthetic dispute, transaction, authentication, document, and account data; no live financial or customer action is permitted.
 - Keep deterministic deadline and policy logic outside agents and require an authorised human outcome before any mock credit, denial, or notice action.
 - Bind Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with a connection-selected `agent_id`, static input, no `thread_id`, discarded output, and fail-open continuation.
-- Keep open human decisions separate from implementation tasks, including the repository `JD/demos` versus tenant `JD_Demos/demos` folder mismatch.
+- Keep open human decisions separate from implementation tasks and deploy beneath the approved `JD_Demos/demos` parent folder.
 - Keep the README concise and use no emojis in documentation.
 
 ---
