@@ -41,7 +41,7 @@ The source already proves that these actors can be composed in one Flow. It does
 | API and RPA | The solution contains an API workflow, though the exported Flow does not invoke it. | Put both API workflow and RPA on the intended path, each with a visible business responsibility. Do not include either only as an unconnected project. |
 | Inline low-code agents | Two inline autonomous agents are wired to Analyze Files, Web Search, and a context index. | Include at least one inline low-code agent and wire at least one tool to it. Declare structured input and output fields that Flow can route on. |
 | Coded agent | A LangGraph email writer is invoked from Flow and uses an MCP tool before self-review. | Include one coded agent with a narrowly visible value-add. Treat its tool use and output contract as part of the demo story. |
-| External agent | Google A2A and Azure AI Foundry connector nodes are present. | Use an external agent when a working connection is available. If it is not, record the unavailable connection and use another approved actor; do not ship a fake connection ID. |
+| External agent | Google A2A and Azure AI Foundry connector nodes are present. | Until a domain-specific external agent is available, include node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` bound to shared connection `0107247a-0197-42c9-b957-05d1b722b111`. The connection was verified enabled in the Playground `demos` folder on August 12, 2026. Put it on a labelled, non-material showcase branch; send only a static message, discard its output, and make timeout or failure rejoin the unchanged core route. Validate each Flow's binding during implementation. |
 | Branching | Three decisions exist, but their current expressions are literal `true`. | Include at least one decision based on a real business value, such as confidence, risk, eligibility, or a human outcome. Label both paths with business language. |
 | Human review | Two quick-form Action Center tasks are present. | Include a human task. Prefer a coded action app when a rich review experience strengthens the demo; wire its completion outcome and consume its returned data downstream. |
 | Parallel work | Two post-review paths run in parallel and merge. | Use parallelism only for independent work, then visibly merge before the next dependent step. |
@@ -55,7 +55,7 @@ Use the following as the default shape for a new vertical demo. Domain language 
 | Segment | Canvas objective | Typical actors and output |
 | --- | --- | --- |
 | 1. Receive and understand | Turn a submitted event, case, or document into a usable work item. | Trigger, API workflow or RPA intake, DeepRAG or classifier, IXP. Output: canonical intake summary and extraction confidence. |
-| 2. Assess and enrich | Have distinct actors resolve different aspects of the case. | Inline agent with tools and context; coded agent; optional external agent through a verified connector; API/RPA enrichment. Output: structured assessment, rationale, and evidence. |
+| 2. Assess and enrich | Have distinct actors resolve different aspects of the case. | Inline agent with tools and context; coded agent; API/RPA enrichment. Output: structured assessment, rationale, and evidence. A shared Azure AI Foundry node may sit on a separate showcase branch but must not contribute to this output. |
 | 3. Decide and review | Make a consequential business route visible and stop for a person where judgement is required. | Decision with real expression; coded action-app human task; exception route. Output: approve, reject, edit, or escalate result. |
 | 4. Act and communicate | Complete independent follow-up work and make the result observable. | Parallel branches, coded-agent communication draft, API/RPA write-back, merge, end. Output: case status, customer/employee communication, and audit-ready summary. |
 
@@ -66,6 +66,7 @@ Canvas rules:
 - Keep each segment to a small number of legible nodes. Collapse plumbing into a purposeful API workflow, RPA project, or agent rather than crowding the Flow.
 - Name nodes by business action and actor, for example `Extract claim packet (IXP)` or `Review coverage recommendation (Action app)`, not by generic implementation labels.
 - Make parallel branches visually symmetric and merge them before a dependent operation.
+- Put the shared Azure AI Foundry external-agent node on a clearly labelled showcase branch below the core path. The branch must be controlled by a demo flag, receive no case or sensitive data, discard the agent response, and rejoin without changing business variables, routing, write-backs, or final status.
 
 ## Actor design contract
 
@@ -79,7 +80,7 @@ Each domain demo spec must identify its actors using this checklist.
 | RPA | Business application or document step, input/output contract, exception contract, and why UI automation is necessary instead of an API. |
 | Inline agent | Prompt responsibility, model, structured input/output, context, tool(s), guardrails, and branch-driving field. |
 | Coded agent | Framework, single visible responsibility, resources/tools, input/output schema, and evaluation expectation. |
-| External agent | Vendor/protocol, connector and connection prerequisite, request/response schema, timeout/error route, and fallback when unavailable. |
+| External agent | Azure AI Foundry node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` through shared connection `0107247a-0197-42c9-b957-05d1b722b111`; connection-selected `agent_id`, static non-sensitive `message`, no `thread_id`, discarded response, demo-flag branch, short timeout/error continuation, and explicit proof that core case state is unchanged. A domain-specific replacement must document its real contract separately. |
 | Human task | Reviewer role, information shown, editable fields, outcomes, timeout, downstream data use, and completion edge. |
 | MCP server/tool | Server ownership, tool purpose, least-privilege inputs, expected call behaviour, and tool-use evaluator. |
 

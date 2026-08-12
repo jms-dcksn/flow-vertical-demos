@@ -10,10 +10,11 @@
 
 ## Global Constraints
 
-- Scope changes to issue #16 and the `commercial-banking` domain.
+- Scope changes to issue #16, its commercial-banking specification, and the deliberately reusable external-agent rule in the reference pattern and template.
 - Preserve the research document as the evidence and recommendation source.
 - Design one independently deployable UiPath Solution with exactly one `.uipx` manifest.
 - Use synthetic payment and screening data; no live payment action is permitted.
+- Bind the shared Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with static input, discarded output, and fail-open continuation.
 - Keep open human decisions separate from implementation tasks.
 
 ---
@@ -24,6 +25,8 @@
 - Create: `commercial-banking/payment-exception-demo-spec.md`
 - Modify: `commercial-banking/README.md`
 - Create: `docs/superpowers/plans/2026-08-12-commercial-banking-payment-exception-spec.md`
+- Modify: `reference-solution/claims-process-flow.md`
+- Modify: `reference-solution/domain-demo-spec-template.md`
 
 **Interfaces:**
 - Consumes: `commercial-banking/agentic-workflow-opportunities.md`, `reference-solution/claims-process-flow.md`, and `reference-solution/domain-demo-spec-template.md`.
@@ -31,7 +34,7 @@
 
 - [ ] **Step 1: Write the specification**
 
-  Fill every template section with explicit payment-exception contracts, including the four reference segments, actor boundaries, real branch expressions, human outcomes, evaluation cases, solution layout, readiness gaps, and owners.
+  Fill every template section with explicit payment-exception contracts, including the four reference segments, actor boundaries, real branch expressions, human outcomes, evaluation cases, solution layout, readiness gaps, and owners. Add the shared Azure AI Foundry connection as a display-only branch that cannot affect core case data or routing.
 
 - [ ] **Step 2: Link the specification from the domain README**
 

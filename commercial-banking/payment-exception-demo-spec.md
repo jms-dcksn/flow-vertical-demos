@@ -60,12 +60,12 @@ The initial build uses a manual trigger for repeatable demonstration. A webhook 
 
 ## Flow topology
 
-Use four blue sticky notes with the titles below. The happy path runs left to right. Schema, matching, compliance, timeout, and dependency exceptions sit below their originating segment. Independent completion work is visually symmetric and merges before the final case update.
+Use four blue sticky notes with the titles below. The happy path runs left to right. Schema, matching, compliance, timeout, and dependency exceptions sit below their originating segment. Independent completion work is visually symmetric and merges before the final case update. A separately labelled `External agent showcase` branch sits below segment 2 so the Azure AI Foundry icon and connection are visible without making the placeholder agent part of the payment investigation.
 
 | Reference segment | Domain-specific canvas title | Actors and business output | Branch or merge evidence |
 | --- | --- | --- | --- |
 | Receive and understand | **1. Receive and correlate** | Manual trigger invokes `payment-message-gateway` API workflow to validate and normalize the message, creates or reads the queue item, and invokes `legacy-payment-console` RPA to retrieve the UI-only status. Output: canonical `PaymentExceptionCase`. | Invalid schema, duplicate `<caseId>:<uetr>`, unmatched UETR, or RPA read failure routes to manual intake or technical exception below the happy path. |
-| Assess and enrich | **2. Investigate the payment** | Deterministic script evaluates field and status rules. Inline `Payment Exception Investigator` uses read-only case, policy-search, customer-context, and screening tools to create the cited evidence summary and recommendation. | `requiresCompliance === true` routes to compliance. Otherwise, `classification === "status_request" && evidenceSummary.confidence >= 0.85` takes the safe status-response path; all other cases continue to operations review. The threshold is demo configuration, not a production policy claim. |
+| Assess and enrich | **2. Investigate the payment** | Deterministic script evaluates field and status rules. Inline `Payment Exception Investigator` uses read-only case, policy-search, customer-context, and screening tools to create the cited evidence summary and recommendation. A separate Azure AI Foundry node demonstrates external-agent connectivity with static metadata only. | `showExternalAgentShowcase === true` enters the non-material showcase branch and rejoins with the canonical case unchanged. Core routing then uses `requiresCompliance === true`; otherwise, `classification === "status_request" && evidenceSummary.confidence >= 0.85` takes the safe status-response path and all other cases continue to operations review. The confidence threshold is demo configuration, not a production policy claim. |
 | Decide and review | **3. Control the resolution** | Safe status enquiries use a bounded no-repair route. Other cases open the `Payment Exception Review` coded action app with facts, findings, citations, recommendation, and editable repair fields. A separate quick-form compliance task handles screening cases. | Named outcomes route with `reviewOutcome.outcome`: `RequestInformation`, `ApproveRepair`, `ReturnOrReject`, or `EscalateCompliance`. Low confidence always enters operations review. A 30-minute demo timeout escalates to the queue manager. Only human outcomes enable write operations. |
 | Act and communicate | **4. Respond and close** | In parallel: API workflow produces a mock network receipt; RPA records an approved repair in the mock legacy console when applicable; coded `Payment Update Writer` retrieves an approved template and drafts a safe status message. The branches merge, receipts reconcile, and the queue item closes. | `requiredReceipts.every(receipt => receipt.status === "succeeded")` completes the case. Any missing or failed required receipt sets `technical_exception`, leaves the item open, and routes it to the queue manager. |
 
@@ -75,7 +75,7 @@ Use four blue sticky notes with the titles below. The happy path runs left to ri
 | --- | --- | --- | --- | --- |
 | Inline low-code agent: `Payment Exception Investigator` | Correlate evidence and produce a bounded, cited recommendation. | Input: canonical case, deterministic findings, `policyVersion`. Output: `classification`, `evidenceSummary`, `requiresCompliance`, `recommendedAction`, `confidence`. | Read-only tools: `get_customer_risk_summary`, `get_screening_result`, and `search_payment_policy`. Policy search is pinned to the approved version. Every material claim needs a source ID; unavailable evidence yields `insufficient_evidence`; web search and write tools are prohibited. | Not provisioned. Build with local synthetic tool responses and a repository policy fixture; bind approved tenant resources later. Retrieval failure bypasses the recommendation and still permits manual review. |
 | Coded agent: `Payment Update Writer` | Draft one internal or customer-safe case update after the human decision. | Input: case ID, outcome, non-restricted facts, recipient type, and response deadline. Output: subject, body, `templateId`, `templateVersion`, and safety findings. | LangGraph agent calls `get_approved_payment_message_template` through a least-privilege UiPath MCP server, then self-checks for restricted sanctions rationale, unsupported promises, and missing required fields. A trajectory evaluator requires the template call. | Not provisioned. Use a local approved-template fixture and mock MCP tool during build. Tool failure routes to a manual-draft task; no message is sent automatically. |
-| External agent | Not used in the initial demo because no working connection is verified and it adds no essential business responsibility. | Not applicable. | No fake connection ID or external call is included. | Reconsider only if a design partner provides a verified external fraud or payment agent with a distinct role. |
+| External agent showcase: `Azure AI Foundry connectivity` | Display the Azure AI Foundry node and prove that Flow can bind an external-agent connection; it performs no payment work. | Inputs are a connection-selected `agent_id` and the constant `message` `UiPath Flow external-agent connectivity showcase for commercial banking`; omit `thread_id`. The response is discarded and is never mapped into `PaymentExceptionCase`. | Node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` with Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111`. Do not pass `caseId`, UETR, payment, customer, screening, policy, reviewer, or receipt data. The node has no authority to influence routing or write-backs. | Verified on August 12, 2026: the node is tenant-available and the connection is enabled and default in UiPath Labs Playground folder `demos`. Each Flow must still validate its binding. The branch is disabled by default, and timeout or failure records only a transient showcase status before rejoining the unchanged core route. |
 
 ## Data and resources
 
@@ -87,6 +87,7 @@ Use four blue sticky notes with the titles below. The happy path runs left to ri
 | Queue: `CommercialBankingPaymentExceptions` | Canonical demo case, unique reference, state transitions, and final outputs. | New Orchestrator queue beneath the solution deployment folder; not provisioned. | Least-privilege robot access, masked identifiers in logs, and retention set during environment provisioning. Duplicate references read the existing record. |
 | Context index: `CommercialBankingPaymentPolicy` | Versioned synthetic operating procedure used by `search_payment_policy`. | New context index; corpus owner is the payment-policy owner; not provisioned. | Only approved synthetic policy content. Retrieval failure produces `insufficient_evidence` and forces human review. |
 | Static screening and customer tools | Return versioned synthetic risk and screening summaries. | Local mocks initially; compliance and customer-data owners must approve any real connection. | Read-only, minimum fields, no raw watchlist data, and compliance hold on ambiguity or failure. |
+| Azure AI Foundry external-agent connection | Supplies `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` on the non-material showcase branch. Its request contains only a selected agent and constant message; its response is discarded. | Shared connection `0107247a-0197-42c9-b957-05d1b722b111`; verified enabled and default in UiPath Labs Playground folder `demos` on August 12, 2026. | No case or sensitive data, no business-variable mapping, and fail-open continuation to the same merge point. Validate the node binding during Flow implementation. |
 | MCP template server | Exposes only `get_approved_payment_message_template(templateId, recipientType)`. | New demo MCP server or local mock; messaging owner approves templates; not provisioned. | No send capability. Tool inputs exclude raw account identifiers and screening rationale; failure creates a manual-draft task. |
 | Coded action app: `Payment Exception Review` | Evidence-rich task UI with before/after values, findings, citations, recommendation, and returned outcome contract. | Deployed independently and referenced by Flow; not provisioned. | Role-restricted access, masked identifiers, required rationale, server-side outcome validation, and no direct payment-system credentials. |
 
@@ -120,7 +121,7 @@ The solution has exactly one `.uipx` manifest and is an independent deployment b
 | --- | --- | --- |
 | Routing safety | Deterministic validation precedes agent reasoning. Compliance or confidence rules force review; write paths require a validated human outcome. | Decision expressions use `requiresCompliance`, `evidenceSummary.confidence`, and `reviewOutcome.outcome`; exception paths are below the happy path. |
 | Access and data | Use synthetic data, least-privilege service identities, masked identifiers, read-only enrichment tools, role-restricted tasks, and mock write targets. | Connection bindings, task roles, mock endpoint configuration, and redacted trace fields are visible during implementation review. |
-| Agent boundaries | Agents recommend and draft only. They cannot clear screening, authorize an outcome, mutate a payment, or send a message. Claims need source IDs; missing evidence triggers manual review. | Structured output schemas, allowlisted tools, prohibited-action prompt rules, and required human task handles. |
+| Agent boundaries | Domain agents recommend and draft only. They cannot clear screening, authorize an outcome, mutate a payment, or send a message. The Azure AI Foundry showcase agent receives only constants, and its output is discarded. Claims need source IDs; missing evidence triggers manual review. | Structured output schemas, allowlisted tools, prohibited-action prompt rules, required human task handles, and no output edge from the showcase node into case variables. |
 | Resilience | Use idempotency, typed errors, bounded transient retries, no retry after ambiguous writes, receipt reconciliation, and an owned technical-exception queue. | `<caseId>:<uetr>` queue reference, retry configuration, receipt merge, and queue-manager route. |
 
 ## Error paths and recovery
@@ -134,6 +135,7 @@ The solution has exactly one `.uipx` manifest and is an independent deployment b
 | API or RPA read failure | Retry transient reads at most twice, then set `technical_exception`. | Platform or RPA owner resolves the dependency and retries from the failed activity. |
 | Ambiguous or failed write | Do not retry automatically and do not create a success receipt. | Queue manager reconciles target state and explicitly resumes or closes the case. |
 | Communication template or safety-check failure | Create a manual-draft task; other successful receipts remain recorded. | Messaging owner supplies an approved draft before merge completion. |
+| Azure AI Foundry showcase timeout, error, or unexpected response | Record only `externalAgentShowcaseStatus` in transient trace data, discard the response, and rejoin the same core route. | Demo owner may disable the branch; payment operations takes no recovery action because business state is unchanged. |
 
 ## Observability and evaluation
 
@@ -143,6 +145,7 @@ The solution has exactly one `.uipx` manifest and is an independent deployment b
 | Flow route evaluator | The principal business claim: each case reaches the correct safe route and final status. | 5/5 initial synthetic cases match the expected review route and final status before promotion. |
 | Evidence evaluator | Recommendations are bounded by supplied facts and the pinned policy. | 100% of material claims contain valid source IDs; prohibited unsupported actions occur 0 times. |
 | Tool-use/trajectory evaluator | The coded writer uses the approved-template tool and no send tool. | Required template-tool call in 5/5 applicable runs; no unapproved tool calls. |
+| External showcase isolation | The placeholder external agent cannot change a business decision or case result. | With the showcase flag off, on, or failing, the same fixture produces identical `PaymentExceptionCase`, route, receipts, and final status; only transient `externalAgentShowcaseStatus` may differ. |
 | Receipt reconciliation | Completion never hides failed or ambiguous work. | `completed` occurs only when every required receipt is present and `succeeded`; dependency-failure cases end in `technical_exception`. |
 
 ### Synthetic evaluation set
@@ -165,12 +168,13 @@ Dataset name: `commercial-banking-payment-exception-v1`.
 4. Open `Payment Exception Review`, compare original and proposed remittance values, edit the proposed value, enter rationale, and select `ApproveRepair`.
 5. Return to the Flow and show the API response, RPA repair, and message-drafting branches running independently and merging.
 6. Open the queue record to show the reviewer edit, template-tool call, mock receipts, final status, and ordered audit events.
-7. Run or preview the sanctions fixture to show that `requiresCompliance` overrides confidence and prevents payment write-back.
+7. Point out the disabled `External agent showcase` branch and its Azure AI Foundry icon. Show that its input is static, its output is discarded, and enabling or failing the branch cannot change the payment route.
+8. Run or preview the sanctions fixture to show that `requiresCompliance` overrides confidence and prevents payment write-back.
 
 ## Success measures
 
 - **Business proof:** The demo makes reduced evidence-assembly and handoff time measurable through median/p90 resolution time, queue age, human touch time, correct-triage rate, override/reopen rate, and evidence completeness. These are pilot measures, not promised savings.
-- **Flow proof:** A viewer can see deterministic checks, two agent roles, API and RPA responsibilities, business-value routing, human authority, parallel follow-up, merge, and recovery without opening generic plumbing nodes.
+- **Flow proof:** A viewer can see deterministic checks, two material agent roles, the non-material Azure AI Foundry showcase, API and RPA responsibilities, business-value routing, human authority, parallel follow-up, merge, and recovery without opening generic plumbing nodes.
 - **Demo proof:** In under ten minutes, a viewer can verify the trigger, cited recommendation, reviewer correction, downstream consumption, reconciled receipts, and compliance exception.
 - **Build proof:** Each project validates, the five-case evaluation set passes, every resource binding is recorded, `resources refresh` and dry-run pack succeed, and the solution is deployable with an immutable version through the changed-solution CI path.
 
@@ -183,6 +187,7 @@ Dataset name: `commercial-banking-payment-exception-v1`.
 | API workflow and RPA on the intended path | `payment-message-gateway` parses/sends; `legacy-payment-console` reads status and records an approved repair. | Contracts specified; mock endpoint and UI remain to build. |
 | Inline agent with a wired tool | `Payment Exception Investigator` uses customer, screening, and pinned-policy tools and returns branch-driving fields. | Contract specified; resources are unverified. |
 | Coded agent with visible value-add | `Payment Update Writer` retrieves an approved template, drafts a safe update, and self-checks it. | Contract specified; coded agent and template server remain to build. |
+| Shared external-agent showcase | Node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` uses connection `0107247a-0197-42c9-b957-05d1b722b111` on a demo-flag branch with a static message, discarded output, and fail-open rejoin. | Node availability and connection state are verified in Playground; the Flow-specific binding and agent selection remain to validate during implementation. |
 | Real business decision and safe exception | Compliance/confidence expression plus named human outcomes; schema, hold, timeout, and technical routes are explicit. | Fully specified; expressions remain to implement and evaluate. |
 | Human decision and returned outcome data | Coded action app returns named outcome, edits, rationale, reviewer, and timestamp; Flow consumes them downstream. | Contract specified; maker-checker policy is an open human decision. |
 | Purposeful parallelism and merge | Network response, applicable RPA write-back, and safe message draft run independently, then merge before closure. | Fully specified; receipt requirements vary by outcome and remain to encode. |
@@ -201,7 +206,7 @@ These decisions refine implementation but do not block building the synthetic, m
 | Confirm response deadlines and escalation SLA. | Payment operations owner | Replace the 30-minute demo timeout with the approved test policy for the selected exception types. |
 | Choose representative systems and prove whether UI automation is necessary. | Enterprise architect and application owners | Review API availability; retain RPA only for a demonstrably UI-only responsibility. |
 | Approve policy corpus, retention, residency, and redaction. | Policy, privacy, and records owners | Sign off the synthetic corpus and environment controls before non-synthetic testing. |
-| Select the exact `JD/demos` child folder and provision connections/resources. | UiPath tenant administrator | Perform resource discovery, create or bind approved resources, and record readiness in the solution. |
+| Select the exact `JD/demos` child folder and provision remaining resources. | UiPath tenant administrator | Reuse the verified Azure AI Foundry connection, discover or create the other approved resources, and record every binding in the solution. |
 | Decide whether commercial banking is one of the three Data Fabric/process-app variants. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this initial spec marks the variant not selected. |
 
 ## Implementation tasks
@@ -212,9 +217,10 @@ These decisions refine implementation but do not block building the synthetic, m
 4. Build the inline investigator, versioned policy context, and structured-output evaluation.
 5. Build the coded update writer, least-privilege template MCP tool, and trajectory/safety evaluators.
 6. Build and deploy the coded action app, then wire its completion handle and returned fields into Flow.
-7. Author the four-segment Flow, exception routes, parallel completion branches, merge, and audit updates.
-8. Run project validation and the five-case evaluation set; resolve all warnings and failed thresholds.
-9. Refresh solution resources, restore, dry-run pack, and register immutable-version deployment configuration.
+7. Author the four-segment Flow, exception routes, non-material Azure AI Foundry showcase branch, parallel completion branches, merge, and audit updates.
+8. Bind and validate Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111`; prove the showcase branch cannot change case data, routing, receipts, or final status.
+9. Run project validation and the five-case evaluation set; resolve all warnings and failed thresholds.
+10. Refresh solution resources, restore, dry-run pack, and register immutable-version deployment configuration.
 
 ## Quality rubric
 
