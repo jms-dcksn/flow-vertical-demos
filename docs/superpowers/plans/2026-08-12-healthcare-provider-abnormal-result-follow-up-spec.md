@@ -13,6 +13,7 @@
 - Scope changes to GitHub issue #23 and the healthcare-provider domain only.
 - Preserve `healthcare-provider/agentic-workflow-opportunities.md` as the research and recommendation source.
 - Design one independently deployable UiPath Solution with exactly one `.uipx` manifest and the CLI-supported nested Flow layout.
+- Deploy the solution and its resources to the approved UiPath Labs Playground parent `JD_Demos/demos`.
 - Use synthetic, de-identified clinical data and mock write targets; no model may diagnose, set urgency, select treatment, acknowledge for a clinician, send patient advice, or write to a live clinical system.
 - Bind Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with static input, no `thread_id`, discarded output, and fail-open continuation that preserves core business state.
 - Keep open human decisions separate from implementation tasks.
