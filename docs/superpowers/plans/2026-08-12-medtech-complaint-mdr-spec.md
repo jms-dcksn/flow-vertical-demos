@@ -18,6 +18,7 @@
 - Bind Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with static input, no `thread_id`, discarded output, and fail-open continuation.
 - Keep open human decisions separate from implementation tasks.
 - Preserve the shared Azure showcase isolation contract; do not modify reference-solution files.
+- Deploy the solution and its resources under the approved Playground parent `JD_Demos/demos`.
 - Keep README changes concise and use no emojis in documentation.
 - Do not run `uip maestro flow debug`, upload, publish, deploy, or make external writes for this specification issue.
 
@@ -70,7 +71,7 @@
 
 - [ ] **Step 6: Review issue and evidence coverage**
 
-  Confirm every issue #26 acceptance criterion has direct evidence; all reference actors have readiness/fallback contracts; clocks, human authority, recovery, evaluation thresholds, and demo proof are testable; open human decisions are distinct from implementation tasks; all unavailable resources are explicit mocks/contracts; and no production-readiness, legal, incidence, causality, benefit, or ROI claim exceeds `medtech/opportunity-research.md`.
+  Confirm every issue #26 acceptance criterion has direct evidence; all reference actors have readiness/fallback contracts; clocks, human authority, recovery, evaluation thresholds, and demo proof are testable; `JD_Demos/demos` is stated directly as the approved deployment parent rather than an open decision; open human decisions are distinct from implementation tasks; all unavailable resources are explicit mocks/contracts; and no production-readiness, legal, incidence, causality, benefit, or ROI claim exceeds `medtech/opportunity-research.md`.
 
 - [ ] **Step 7: Commit the explicit scope**
 
