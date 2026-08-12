@@ -17,7 +17,7 @@
 - A utilization-management nurse owns approval and information requests; a medical director owns every denial or reduction.
 - Bind Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with static input, no `thread_id`, discarded output, and fail-open continuation.
 - Keep open human decisions separate from implementation tasks.
-- Record the repository `JD/demos` versus authenticated CLI `JD_Demos/demos` discrepancy without silently choosing a deployment path.
+- Deploy to the approved Playground parent folder `JD_Demos/demos`.
 - Keep README changes concise and use no emojis in documentation.
 
 ---

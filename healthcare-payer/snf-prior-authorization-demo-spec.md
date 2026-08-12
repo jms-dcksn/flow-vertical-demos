@@ -90,7 +90,7 @@ Use four blue sticky notes with the titles below. The happy path runs left to ri
 
 | Resource or data dependency | Purpose and contract | Owner/folder/readiness | Security and failure handling |
 | --- | --- | --- | --- |
-| IXP project: `HealthcarePayerSnfPacketExtraction` | Extract requested service/dates/days, diagnoses, functional status, therapy findings, prior level of function, medications, discharge disposition, and document/page references from synthetic PDFs. | New project/model; exact `JD/demos` child folder not selected and no model binding verified. | Synthetic files only. Confidence below `0.90`, a missing required document, or conflicting extracted values forces human review; versioned fixture JSON preserves the output contract offline. |
+| IXP project: `HealthcarePayerSnfPacketExtraction` | Extract requested service/dates/days, diagnoses, functional status, therapy findings, prior level of function, medications, discharge disposition, and document/page references from synthetic PDFs. | New project/model; deploy beneath approved parent `JD_Demos/demos`; no model binding verified. | Synthetic files only. Confidence below `0.90`, a missing required document, or conflicting extracted values forces human review; versioned fixture JSON preserves the output contract offline. |
 | API workflow: `prior-auth-intake-gateway` | Operations `normalize_request`, `read_coverage_context`, `request_information`, and `validate_and_archive_notice` return typed synthetic results and receipts. Flow invokes it in segments 1, 2, and 4. | New sibling project; production interoperability standard, endpoints, and connections are unverified. | Local mock endpoints are the default. Calls use `correlationId`, at most two retries for clearly transient reads, no automatic retry after an ambiguous write, and typed failure results that never fabricate success. |
 | RPA: `legacy-utilization-management` | Operation `record_determination` enters only the validated human outcome in a local legacy UM desktop fixture and returns a transaction ID plus read-back values. | New sibling project; the local fixture deliberately has no API. A real application/API gap and unattended runtime are unverified. | Synthetic data only. The activity compares read-back to approved values. Selector failure or ambiguous write creates a screenshot/error reference and routes to reconciliation without automatic replay. |
 | Queue: `HealthcarePayerSnfAuthorizations` | Canonical demo case, idempotency, state transitions, final output, and ordered audit events. | New Orchestrator queue beneath the deployment folder; not provisioned. Use a local fixture until provisioned. | Least-privilege robot access, masked identifiers, implementation-time retention selection, and replay-safe unique references. |
@@ -113,7 +113,7 @@ healthcare-payer/snf-prior-authorization/
 └── snf-authorization-review/
 ```
 
-The solution has exactly one `.uipx` manifest and is independently deployable. The coded action app remains independently deployed if required by the platform, with its versioned contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version. The repository names the deployment parent `JD/demos`, while authenticated CLI inspection on August 12, 2026 exposed `JD_Demos/demos`; a tenant administrator must reconcile that path before deployment.
+The solution has exactly one `.uipx` manifest and is independently deployable. The coded action app remains independently deployed if required by the platform, with its versioned contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version under the approved Playground parent folder `JD_Demos/demos`.
 
 ## Human decisions
 
@@ -187,7 +187,7 @@ Dataset name: `healthcare-payer-snf-prior-authorization-v1`.
 - **Business proof:** The demo exposes decision timeliness, additional-information rate and reasons, adverse rate, appeal-overturn follow-up, evidence completeness, reviewer edit rate, notice specificity, and write-back mismatch as measurable pilot signals without promising improvement.
 - **Flow proof:** A viewer can see IXP, deterministic checks, two material agent roles, the non-material Azure AI Foundry showcase, API/RPA contrast, real routing, two levels of human authority, independent work, merge, and safe recovery.
 - **Demo proof:** In under ten minutes, a viewer can verify evidence provenance, nurse-to-medical-director escalation, cited consequential determination, downstream use of returned fields, reconciled artifacts, and a technical exception.
-- **Build proof:** Every project validates, the five-case evaluation set passes, all resource bindings are recorded, `resources refresh` and dry-run pack succeed, and the immutable package can follow changed-solution CI into Playground after the folder-name discrepancy is resolved.
+- **Build proof:** Every project validates, the five-case evaluation set passes, all resource bindings are recorded, `resources refresh` and dry-run pack succeed, and the immutable package can follow changed-solution CI into Playground under `JD_Demos/demos`.
 
 ## Reference mapping
 
@@ -206,7 +206,7 @@ Dataset name: `healthcare-payer-snf-prior-authorization-v1`.
 | MCP server/tool | Least-privilege `get_approved_authorization_template` supports the coded writer; trajectory evaluation requires the call. | Contract specified; server or mock remains to build. |
 | Evaluation set and evaluator | Five fixtures plus route, evidence, authority, trajectory, isolation, and receipt checks with exact initial thresholds. | Fully specified; fixtures and evaluators remain to build. |
 | Process-app variant | Not selected. | Later cross-domain selection may change the canonical record and app design. |
-| Solution boundary and delivery contract | One `healthcare-payer-snf-prior-authorization` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, and changed-solution CI. | Fully specified; deployment-folder naming and remaining resources require resolution. |
+| Solution boundary and delivery contract | One `healthcare-payer-snf-prior-authorization` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI, and approved `JD_Demos/demos` deployment parent. | Fully specified; remaining resources require provisioning. |
 
 ## Open human decisions
 
@@ -221,7 +221,7 @@ These decisions refine implementation but do not block the synthetic, mock-backe
 | Confirm required packet documents and extraction thresholds. | UM clinical and document-intelligence owners | Review the synthetic taxonomy, labeled fixtures, `0.90` demo threshold, and minimum evidence for each outcome. |
 | Validate production API surfaces and the legacy UM API gap. | Enterprise architect and application owners | Retain RPA only if no governed write/read-back API exists; otherwise choose another credible UI-only responsibility or approve a reference deviation. |
 | Approve privacy, security, retention, and notice controls. | Privacy, security, records, legal, and accessibility owners | Approve allowed fields, role access, redaction, retention, languages, and templates before non-synthetic testing. |
-| Reconcile the deployment folder name and provision resources. | UiPath tenant administrator | Resolve repository `JD/demos` versus observed `JD_Demos/demos`, reuse the verified Azure connection, provision remaining resources, and record each binding. |
+| Provision tenant resources beneath the approved deployment parent. | UiPath tenant administrator | Use `JD_Demos/demos`, reuse the verified Azure connection, provision remaining resources, and record each binding. |
 | Set pilot baselines and target measures. | UM analytics and operations owners | Supply observed timing, information-request, adverse, appeal-overturn, notice, and recovery baselines before making benefit claims. |
 | Decide whether healthcare payer is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 
@@ -236,7 +236,7 @@ These decisions refine implementation but do not block the synthetic, mock-backe
 7. Author the four-segment Flow, exception routes, external Azure showcase, parallel completion branches, merge, reconciliation, and audit updates.
 8. Bind and validate Azure connection `0107247a-0197-42c9-b957-05d1b722b111`; prove off, on, and failing showcase runs cannot change case data, routing, human requirements, receipts, or status.
 9. Run project validation and the five-case evaluation set; resolve every warning and failed threshold.
-10. Refresh solution resources, restore, dry-run pack, and register immutable deployment configuration after resolving the target-folder naming discrepancy.
+10. Refresh solution resources, restore, dry-run pack, and register immutable deployment configuration for `JD_Demos/demos`.
 
 ## Quality rubric
 
@@ -245,5 +245,5 @@ These decisions refine implementation but do not block the synthetic, mock-backe
 | Enterprise credibility | 2 | Consequential clinical decision, current public evidence, roles, data contract, controls, and pilot measures are explicit; payer policy, systems, and baselines remain unverified. | Clinical-policy, operations, legal, and system owners validate during discovery. |
 | Flow differentiation | 3 | Four segments visibly coordinate IXP, deterministic logic, agents, API, RPA, two-level human authority, parallel work, merge, and safe recovery. | Flow implementer preserves the topology and validates each real expression and error edge. |
 | Demo clarity | 3 | The nurse-to-medical-director adverse journey and read-back exception have named, observable proof points and a timed script. | Demo owner rehearses both fixtures after deployment. |
-| Build feasibility | 2 | Inputs, outputs, mocks, fallbacks, solution boundary, evaluation, CLI/auth target, and verified Azure dependency are recorded; domain resources and target-folder naming remain unresolved. | Tenant administrator and implementers provision resources and close the owned path discrepancy. |
+| Build feasibility | 2 | Inputs, outputs, mocks, fallbacks, solution boundary, evaluation, CLI/auth target, approved deployment parent, and verified Azure dependency are recorded; domain resources remain unprovisioned. | Tenant administrator and implementers provision the remaining resources beneath `JD_Demos/demos`. |
 | **Total** | **10/12** | **Ready for implementation planning as a synthetic demo; not ready for production clinical use, non-synthetic data, or deployment until owned decisions and bindings are resolved.** | **Start with solution and fixtures, then close human decisions before replacing mocks.** |
