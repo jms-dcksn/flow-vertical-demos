@@ -28,6 +28,11 @@ Map each segment to the required reference topology. Use three or four named
 sticky notes; keep the happy path left-to-right, exceptions below it, and merge
 independent parallel branches before dependent work.
 
+Include the shared Azure AI Foundry external-agent node on a labelled showcase
+branch below the core path. Bind connection
+`0107247a-0197-42c9-b957-05d1b722b111`, pass only static non-sensitive demo
+metadata, discard the response, and rejoin without changing case state or route.
+
 | Reference segment | Domain-specific canvas title | Actors and business output | Branch or merge evidence |
 | --- | --- | --- | --- |
 | Receive and understand | [Title] | [Trigger, intake/API/RPA, classification/IXP, output] | [Confidence or validation path] |
@@ -41,7 +46,7 @@ independent parallel branches before dependent work.
 | --- | --- | --- | --- | --- |
 | Inline low-code agent | [Responsibility] | [Schema and branch-driving field] | [Tool(s), context source, guardrails] | [Resource state and fallback] |
 | Coded agent | [Single visible value-add] | [Schema] | [Framework, MCP/tool purpose, evaluation] | [Resource state and fallback] |
-| External agent, if used | [Responsibility] | [Schema] | [Vendor/protocol, connector/connection] | [Timeout/error route] |
+| External agent showcase | Display Azure AI Foundry connectivity without performing domain work. | Connection-selected `agent_id`, static non-sensitive `message`, no `thread_id`; response discarded. | Node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` and connection `0107247a-0197-42c9-b957-05d1b722b111`; no case or sensitive data. | Connection verified enabled in Playground `demos` on August 12, 2026; demo-flag branch and timeout/error rejoin the unchanged core route. |
 
 ## Data and resources
 
@@ -95,6 +100,7 @@ independent parallel branches before dependent work.
 | API workflow and RPA on the intended path | [Mapping or N/A rationale] | [Evidence/gap] |
 | Inline agent with a wired tool | [Mapping] | [Evidence/gap] |
 | Coded agent with visible value-add | [Mapping] | [Evidence/gap] |
+| Shared external-agent showcase | [Non-material branch, static input, discarded output, and connection binding] | [Evidence/gap] |
 | Real business decision and safe exception | [Mapping] | [Evidence/gap] |
 | Human decision and returned outcome data | [Mapping] | [Evidence/gap] |
 | Purposeful parallelism and merge | [Mapping or N/A rationale] | [Evidence/gap] |
