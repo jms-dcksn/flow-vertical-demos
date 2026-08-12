@@ -123,7 +123,7 @@ pharma/adverse-event-icsr-triage/
 └── safety-case-medical-review/
 ```
 
-The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed if required by the platform, with its contract/version pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, validate every project and Flow warning, and dry-run pack. Pull requests validate only the changed solution. Publish and deploy occur only after merge to `main` through `playground-deploy`, using an immutable package version and a child folder beneath `JD/demos` (the authenticated tenant currently reports the path as `JD_Demos/demos`).
+The solution has exactly one `.uipx` manifest and is an independent deployment boundary. The coded action app remains independently deployed if required by the platform, with its contract/version pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, validate every project and Flow warning, and dry-run pack. Pull requests validate only the changed solution. Publish and deploy occur only after merge to `main` through `playground-deploy`, using an immutable package version and a child folder beneath the approved `JD_Demos/demos` deployment parent.
 
 ## Human decisions in the Flow
 
@@ -237,7 +237,7 @@ These decisions refine or approve implementation but do not block the synthetic,
 | Approve product-label, terminology, and rule content. | Medical information, terminology, and regulatory owners | Use synthetic versioned labels/terms initially; do not represent them as licensed MedDRA or production rules. |
 | Approve privacy, security, retention, and generative-AI controls. | Privacy, security, pharmacovigilance quality, and validation owners | Synthetic data and no external writes are mandatory until the data path, masking, access, audit, and validation approach are approved. |
 | Set human-task escalation timing and pilot baselines. | Pharmacovigilance operations lead | Keep timeout configurable and make no improvement claim until observed baselines/targets are supplied. |
-| Select exact solution child folder and provision resources. | UiPath tenant administrator | Deploy beneath `JD/demos`; reconcile repository naming with authenticated `JD_Demos/demos`, then provision queue, IXP, agents, action app, runtime, and bindings. |
+| Select the solution child folder and provision resources. | UiPath tenant administrator | Create the solution child folder beneath the approved `JD_Demos/demos` deployment parent, then provision the queue, IXP, agents, action app, runtime, and bindings. |
 | Decide whether Pharma is a later Data Fabric/process-app variant. | Demo portfolio owner | This spec marks it not selected; a later cross-domain decision may change the canonical record and review experience. |
 
 ## Implementation tasks
