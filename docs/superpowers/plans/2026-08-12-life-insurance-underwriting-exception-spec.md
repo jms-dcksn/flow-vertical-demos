@@ -14,6 +14,7 @@
 - Preserve `life-insurance/agentic-workflow-opportunities.md` as the evidence and recommendation source.
 - Select the top-ranked underwriting evidence-exception orchestrator without another approval gate; keep carrier-owned policies and authorities as open human decisions.
 - Design one independently deployable UiPath Solution with exactly one `.uipx` manifest and the CLI-supported nested Flow layout.
+- Deploy the solution under the approved UiPath Labs Playground parent `JD_Demos/demos`.
 - Use synthetic application, medical, consumer-report, carrier-rule, and policy-admin data; no real evidence acquisition, applicant decision, system write, or communication is permitted.
 - Treat every unprovisioned tenant, vendor, carrier, model, tool, and system dependency as a named mock or owned readiness gap.
 - Bind node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` to connection `0107247a-0197-42c9-b957-05d1b722b111` only on a disabled-by-default, non-material showcase branch with a connection-selected `agent_id`, constant static message, no `thread_id`, discarded output, and fail-open continuation to an unchanged core route.
@@ -60,7 +61,7 @@
 
 - [ ] **Step 7: Separate human decisions from build work**
 
-  Add an owned human-decision table for carrier scope, rules/thresholds, authorization/privacy, systems of record, API gap, vendors/models, reviewer authority/SLA, tenant resources, pilot measures, and process-app selection. Follow it with a distinct ordered implementation-task list and a quality score of at least 10/12 with no zero.
+  Add an owned human-decision table for carrier scope, rules/thresholds, authorization/privacy, systems of record, API gap, vendors/models, reviewer authority/SLA, resource provisioning, pilot measures, and process-app selection. Follow it with a distinct ordered implementation-task list and a quality score of at least 10/12 with no zero.
 
 - [ ] **Step 8: Link the specification**
 
