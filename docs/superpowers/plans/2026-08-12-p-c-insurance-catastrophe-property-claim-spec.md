@@ -13,6 +13,7 @@
 - Scope changes to GitHub issue #27 and exactly three files: the P&C insurance specification, domain README, and this plan.
 - Preserve `p-c-insurance/agentic-workflow-opportunities.md` as the research and recommendation source.
 - Design one independently deployable UiPath Solution with exactly one `.uipx` manifest and the CLI-supported nested Flow layout.
+- Deploy the solution and its resources beneath the approved `JD_Demos/demos` parent folder in Playground.
 - Use synthetic claim, claimant, property, policy, evidence, rule, and system data; no live coverage, payment, vendor, or communication action is permitted.
 - Treat all unverified domain resources as build targets with contract-compatible mocks.
 - Bind Azure AI Foundry connection `0107247a-0197-42c9-b957-05d1b722b111` only on a non-material showcase branch with static input, discarded output, and fail-open continuation.
