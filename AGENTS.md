@@ -55,7 +55,7 @@ updated deliberately.
 - The deploy path is `pack` -> `publish` -> `deploy run`; `solution upload` is
   only for Studio Web editing/debugging and is not a deployment path.
 - Deploy demo solutions to the UiPath Labs `Playground` tenant, under the
-  `JD/demos` parent folder. Do not create environment-specific solutions.
+  `JD_Demos/demos` parent folder. Do not create environment-specific solutions.
 - CI must operate per changed solution folder using GitHub Actions path filters
   or a changed-solution matrix.
 - Pull requests validate affected solutions. Publishing and deployment run only

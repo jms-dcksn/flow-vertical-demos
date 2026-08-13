@@ -84,7 +84,7 @@ Use four blue sticky notes with the titles below. The happy path runs left to ri
 
 | Resource or data dependency | Purpose and contract | Owner/folder/readiness | Security and failure handling |
 | --- | --- | --- | --- |
-| IXP project: `RetailRecallNoticeExtraction` | Extract UPC, model, date/lot codes, hazard, remedy, and effective date from a synthetic supplier PDF. | New project/model; target child folder beneath `JD/demos` not chosen; not provisioned. | Synthetic files only. Confidence below `0.90`, missing identifiers, or conflict with CPSC data forces review; fixture JSON preserves the output contract offline. |
+| IXP project: `RetailRecallNoticeExtraction` | Extract UPC, model, date/lot codes, hazard, remedy, and effective date from a synthetic supplier PDF. | New project/model; target child folder beneath `JD_Demos/demos` not chosen; not provisioned. | Synthetic files only. Confidence below `0.90`, missing identifiers, or conflict with CPSC data forces review; fixture JSON preserves the output contract offline. |
 | API workflow: `recall-intake-gateway` | Operations `normalize_notice`, `read_exposure`, and `record_actions` read public/fixture data and return deterministic mock receipts. | New sibling project; CPSC live-read permission and retail mock endpoint remain unverified. | Capture source URL, timestamp, hash, and version. Use cached fixture fallback marked as stale; typed failures never fabricate live evidence or success receipts. |
 | RPA: `legacy-pos-stop-sale` | Operation `apply_stop_sale` writes confirmed SKU/channel scope to a local POS-admin fixture and returns per-scope receipts. | New sibling project targeting a local web fixture; unattended runtime not provisioned. | UI automation is used only to demonstrate a legacy API gap. No free-text navigation; ambiguous writes are not retried; screenshot/error reference routes to reconciliation. |
 | Queue: `RetailProductRecallCases` | Canonical demo case, idempotency, state transitions, outputs, and ordered audit events. | New Orchestrator queue beneath the solution deployment folder; not provisioned. | Least-privilege robot access, masked customer identifiers, retention chosen during provisioning, and version-aware duplicate handling. |
@@ -107,7 +107,7 @@ retail/product-recall-containment/
 └── product-recall-scope-review/
 ```
 
-The solution has exactly one `.uipx` manifest and is independently deployable. The coded action app remains independently deployed if required by the platform, with its versioned contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version and a child folder beneath `JD/demos`.
+The solution has exactly one `.uipx` manifest and is independently deployable. The coded action app remains independently deployed if required by the platform, with its versioned contract pinned by solution configuration. Before packaging, run `uip solution resources refresh`, restore dependencies, and dry-run pack. Pull requests validate only the changed solution; publish and deploy occur only after merge to `main` through `playground-deploy`, with an immutable package version and a child folder beneath `JD_Demos/demos`.
 
 ## Human decisions
 
@@ -213,7 +213,7 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 | Validate the POS API gap and RPA responsibility. | POS owner and enterprise architect | Retain RPA only if no governed stop-sale API exists; otherwise choose another credible UI-only action or approve a reference deviation. |
 | Approve customer/privacy and communication controls. | Privacy, legal, CRM, and accessibility owners | Confirm eligible fields, consent/suppression, languages, templates, and retention before non-synthetic testing. |
 | Choose live CPSC versus cached-fixture demo behavior. | Security/network and demo owners | Approve egress or make the versioned fixture the default with optional live refresh. |
-| Select the exact `JD/demos` child folder and provision resources. | UiPath tenant administrator | Reuse the verified Azure connection; provision IXP, queue, agents, action app, runtime, and record every binding. |
+| Select the exact `JD_Demos/demos` child folder and provision resources. | UiPath tenant administrator | Reuse the verified Azure connection; provision IXP, queue, agents, action app, runtime, and record every binding. |
 | Set pilot baselines and target measures. | Product-safety operations owner | Supply observed timing, reconciliation, coverage, remedy, and aging baselines before making benefit claims. |
 | Decide whether retail is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 

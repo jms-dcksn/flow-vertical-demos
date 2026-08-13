@@ -326,7 +326,7 @@ medical-director review and no system write completes without read-back.
 - Decide whether this domain is one of the three later Data Fabric/process-app
   variants. Until selected, the canonical case store remains a mock.
 - Verify availability and ownership of IXP, context grounding, Action Center,
-  correspondence, and the legacy-system test surface in `JD/demos`.
+  correspondence, and the legacy-system test surface in `JD_Demos/demos`.
 - Confirm whether a coded action app is worth its independent deployment
   boundary or whether a quick form is sufficient for the research demo.
 - Confirm a production interoperability standard and version only after the

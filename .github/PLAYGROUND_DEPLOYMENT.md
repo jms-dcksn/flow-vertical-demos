@@ -1,13 +1,13 @@
 # Playground deployment setup
 
 Demo solutions deploy to UiPath Labs at `https://cloud.uipath.com`, tenant
-`Playground`, under the `JD/demos` parent folder.
+`Playground`, under the `JD_Demos/demos` parent folder.
 
 ## One-time setup
 
 1. A UiPath Labs tenant administrator creates or identifies a dedicated OAuth
    client and grants it only the permissions needed to publish and deploy
-   solutions in `JD/demos`.
+   solutions in `JD_Demos/demos`.
 2. A repository administrator opens the `playground-deploy` GitHub Environment
    and adds these environment secrets:
    - `UIPATH_CLIENT_ID`
@@ -19,7 +19,7 @@ Do not commit either value or share the client secret in a pull request or log.
 
 The reusable workflow from issue #4 uses `playground-deploy` only in its
 publish/deploy job. That job runs after a push to `main`, logs in to the
-`Playground` tenant, and deploys changed solutions to `JD/demos`.
+`Playground` tenant, and deploys changed solutions to `JD_Demos/demos`.
 
 Pull-request jobs validate only. They must not access this environment,
 authenticate to UiPath, publish a package, or deploy a solution.

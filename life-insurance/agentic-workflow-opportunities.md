@@ -236,7 +236,7 @@ listed under scope, but set targets only after a carrier supplies baseline data.
    intended jurisdictions.
 5. Confirm whether MIB, prescription, MVR, EHR, and policy-admin sandboxes exist.
    Until then, use clearly labeled synthetic fixtures and the local mock UI.
-6. Verify UiPath Labs `Playground` access under `JD/demos`, IXP/model resources,
+6. Verify UiPath Labs `Playground` access under `JD_Demos/demos`, IXP/model resources,
    Action Center/action-app deployment, Integration Service connections, and the
    allowed model. The research session was not authenticated to UiPath.
 7. Establish current baselines and acceptance targets for cycle time, evidence

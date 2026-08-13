@@ -306,7 +306,7 @@ or labour savings require the participating bank's baseline and control owners.
    genuinely UI-only legacy step and use a safe simulator for the public demo.
 6. Confirm Action Center quick form versus coded action app, reviewer roles,
    outcome schema, escalation SLA, and reassignment/timeout owner.
-7. Verify the UiPath Labs `Playground` resources under `JD/demos`: connections,
+7. Verify the UiPath Labs `Playground` resources under `JD_Demos/demos`: connections,
    IXP model, policy context, notification sink, and least-privilege identities.
    None were inspectable without an authenticated CLI session.
 8. Obtain synthetic transaction and document fixtures that cover the evaluation

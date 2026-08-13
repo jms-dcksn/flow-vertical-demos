@@ -85,7 +85,7 @@ Use `on.workflow_call` with all deployment inputs. Its sole job uses `environmen
 uip login --client-id env.UIPATH_CLIENT_ID --client-secret env.UIPATH_CLIENT_SECRET --tenant Playground --output json
 ```
 
-Run refresh, restore, and pack into `package/` with the supplied name and version. Publish the exact resulting zip, run `uip solution deploy run` with `JD/demos`, supplied deployment and folder names, and the supplied config. Extract `PipelineDeploymentId` from the run JSON and call `uip solution deploy status` with it. Upload the exact zip and all logs with 30-day retention, including on failure.
+Run refresh, restore, and pack into `package/` with the supplied name and version. Publish the exact resulting zip, run `uip solution deploy run` with `JD_Demos/demos`, supplied deployment and folder names, and the supplied config. Extract `PipelineDeploymentId` from the run JSON and call `uip solution deploy status` with it. Upload the exact zip and all logs with 30-day retention, including on failure.
 
 - [ ] **Step 3: Verify reusable workflow syntax**
 
