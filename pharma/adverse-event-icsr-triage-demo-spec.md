@@ -220,7 +220,7 @@ Dataset name: `pharma-adverse-event-icsr-triage-v1`.
 | Human decision and returned outcome data | Coded action app returns assessment corrections, duplicate disposition, clock/reporting fields, rationale, reviewer, timestamp, and named outcome. | Contract specified; role delegation, SLA, and deployed app require approval/provisioning. |
 | Purposeful parallelism and merge | Outcome-required mock E2B, safety-UI, and follow-up-preview branches merge before receipt reconciliation. | Fully specified; required-receipt matrix remains to encode. |
 | Evaluation set and evaluator | Five cases plus route, validity, safety, due-date, grounding, trajectory, isolation, and receipt evaluators. | Exact initial gates specified; fixtures/evaluators remain to build. |
-| Process-app variant | Not selected. Queue is the canonical demo record. | Later cross-domain selection may replace the record/app design. |
+| Process-app variant | Not selected. The queue stays the canonical demo record. | Closed on August 20, 2026 by decision #56, which selected commercial banking, healthcare provider, and life insurance. No open dependency remains. |
 | Solution boundary and delivery contract | One `pharma-adverse-event-icsr-triage` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, and changed-solution CI. | Fully specified; deployment child folder/resources remain to provision. |
 
 ## Open human decisions
@@ -238,7 +238,6 @@ These decisions refine or approve implementation but do not block the synthetic,
 | Approve privacy, security, retention, and generative-AI controls. | Privacy, security, pharmacovigilance quality, and validation owners | Synthetic data and no external writes are mandatory until the data path, masking, access, audit, and validation approach are approved. |
 | Set human-task escalation timing and pilot baselines. | Pharmacovigilance operations lead | Keep timeout configurable and make no improvement claim until observed baselines/targets are supplied. |
 | Select the solution child folder and provision resources. | UiPath tenant administrator | Create the solution child folder beneath the approved `JD_Demos/demos` deployment parent, then provision the queue, IXP, agents, action app, runtime, and bindings. |
-| Decide whether Pharma is a later Data Fabric/process-app variant. | Demo portfolio owner | This spec marks it not selected; a later cross-domain decision may change the canonical record and review experience. |
 
 ## Implementation tasks
 

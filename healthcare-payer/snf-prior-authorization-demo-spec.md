@@ -205,7 +205,7 @@ Dataset name: `healthcare-payer-snf-prior-authorization-v1`.
 | Purposeful parallelism and merge | Legacy UM write/read-back runs independently from grounded notice validation/archive, then both merge before reconciliation. | Fully specified; outcome-specific receipt matrix remains to encode. |
 | MCP server/tool | Least-privilege `get_approved_authorization_template` supports the coded writer; trajectory evaluation requires the call. | Contract specified; server or mock remains to build. |
 | Evaluation set and evaluator | Five fixtures plus route, evidence, authority, trajectory, isolation, and receipt checks with exact initial thresholds. | Fully specified; fixtures and evaluators remain to build. |
-| Process-app variant | Not selected. | Later cross-domain selection may change the canonical record and app design. |
+| Process-app variant | Not selected. The Orchestrator queue stays the canonical demo record. | Closed on August 20, 2026 by decision #56, which selected commercial banking, healthcare provider, and life insurance. No open dependency remains. |
 | Solution boundary and delivery contract | One `healthcare-payer-snf-prior-authorization` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI, and approved `JD_Demos/demos` deployment parent. | Fully specified; remaining resources require provisioning. |
 
 ## Open human decisions
@@ -223,7 +223,6 @@ These decisions refine implementation but do not block the synthetic, mock-backe
 | Approve privacy, security, retention, and notice controls. | Privacy, security, records, legal, and accessibility owners | Approve allowed fields, role access, redaction, retention, languages, and templates before non-synthetic testing. |
 | Provision tenant resources beneath the approved deployment parent. | UiPath tenant administrator | Use `JD_Demos/demos`, reuse the verified Azure connection, provision remaining resources, and record each binding. |
 | Set pilot baselines and target measures. | UM analytics and operations owners | Supply observed timing, information-request, adverse, appeal-overturn, notice, and recovery baselines before making benefit claims. |
-| Decide whether healthcare payer is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 
 ## Implementation tasks
 

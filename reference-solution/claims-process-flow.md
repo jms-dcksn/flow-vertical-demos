@@ -83,6 +83,7 @@ Each domain demo spec must identify its actors using this checklist.
 | External agent | Azure AI Foundry node `uipath.connector.uipath-microsoft-azureaifoundry.execute-the-thread` through shared connection `0107247a-0197-42c9-b957-05d1b722b111`; connection-selected `agent_id`, static non-sensitive `message`, no `thread_id`, discarded response, demo-flag branch, short timeout/error continuation, and explicit proof that core case state is unchanged. A domain-specific replacement must document its real contract separately. |
 | Human task | Reviewer role, information shown, editable fields, outcomes, timeout, downstream data use, and completion edge. |
 | MCP server/tool | Server ownership, tool purpose, least-privilege inputs, expected call behaviour, and tool-use evaluator. |
+| Data Fabric record and process app (selected variants only) | Entity and choice sets, correlation field, record-created trigger, write-back points, the record-updated wait plus its literal filter and correlation check, app access roles, and the app's independent deployment identity. |
 
 ## Human review and coded action apps
 
@@ -97,17 +98,83 @@ Its action schema must separate:
 
 The Flow must wait on the task’s completion handle, then route from the chosen outcome and returned field IDs. Do not treat a visual form as a terminal node.
 
+The three selected process-app demos replace this mechanism at their primary review point only. See the variant section below.
+
 ## Data Fabric-backed process-app variant
 
-Exactly three demos will later use a coded process app and Data Fabric as the canonical case record. This is an intentional variant of the reference pattern, not an extra requirement for every demo. The three domains will be selected in later issues.
+Exactly three demos use a coded process app and Data Fabric as the canonical case record. This is an intentional variant of the reference pattern, not an extra requirement for every demo.
 
-For each selected demo:
+### Selected domains
 
-1. A Data Fabric entity record is the canonical case/instance record.
-2. Record creation triggers the Flow and supplies the correlation ID.
-3. The Flow writes back meaningful state transitions and agent outputs to that record.
-4. At human-in-the-loop points, the Flow waits for a Data Fabric record-change trigger rather than treating the UI as a detached task.
+The demo portfolio owner selected the three variants on August 20, 2026 in issue #56. The other six demos keep an Orchestrator queue as the canonical record; that is now a closed decision, not an open one.
+
+| Selected demo | Spec | Why this demo carries the variant |
+| --- | --- | --- |
+| Commercial banking payment exception | [`commercial-banking/payment-exception-demo-spec.md`](../commercial-banking/payment-exception-demo-spec.md) | It is also the golden-path pilot (issue #59), so the variant mechanics are proven once, first, and in the open. Its reviewer edits proposed repair values, which is the clearest before-and-after record write in the portfolio. |
+| Healthcare provider abnormal result follow-up | [`healthcare-provider/abnormal-diagnostic-result-follow-up-demo-spec.md`](../healthcare-provider/abnormal-diagnostic-result-follow-up-demo-spec.md) | Result versions, amendments, and acknowledgment ownership are record state, not queue state. A persistent case record shows aging, re-review, and closure evidence that a transient queue item hides. |
+| Life insurance underwriting evidence exception | [`life-insurance/underwriting-evidence-exception-demo-spec.md`](../life-insurance/underwriting-evidence-exception-demo-spec.md) | It has two accountable human stages and long-lived evidence. A queryable record makes proposed-versus-final values, evidence provenance, and the second-person adverse control visible in one place. |
+
+The three cover finance, healthcare, and insurance, so the variant is not concentrated in one buyer story. Each selected demo keeps every other reference requirement.
+
+### Build sequencing
+
+Each selected spec was updated with its variant design before its build issue started (#59, #64, #65), so no demo has to be reworked from a queue design later. Two consequences:
+
+- The Data Fabric entity, its choice sets, and an enabled Data Fabric connection in `JD_Demos/demos` must exist before variant implementation begins. The entity and choice sets are solution resources (`Entity` and `ChoiceSet` kinds); the connection is a folder resource.
+- Issue #60 extracts shared build conventions from the pilot. Because the pilot is a variant, it must mark which conventions are variant-specific (entity, record trigger, event wait, process app) and which are shared by all nine demos.
+
+### Design rules for a selected demo
+
+1. A Data Fabric entity record is the canonical case/instance record. There is no parallel Orchestrator queue for the same case.
+2. Record creation triggers the Flow and supplies the correlation ID. Use `uipath.connector.trigger.uipath-uipath-dataservice.record-created`; the record `Id` plus the domain correlation field is the idempotency key.
+3. The Flow writes back meaningful state transitions and agent outputs to that record, using `uipath.connector.uipath-uipath-dataservice.update-entity-record`. Every visible state in the app is a real field, not a derived guess.
+4. At the primary human-in-the-loop point, the reviewer works in the process app and the Flow waits for a record change, not a task completion handle. Use the mid-flow event node `uipath.connector.event.uipath-uipath-dataservice.record-updated`. Role-restricted secondary reviews (compliance, supervisor, coordinator) stay Action Center tasks with completion handles, so both mechanisms remain visible in one demo.
 5. The coded process app reads and updates the same record. It must not create a competing source of truth.
+
+### Verified platform mechanics
+
+Verified on August 20, 2026 with `uip` 1.199.0, authenticated as `james.dickson@uipath.com`. Re-validate during implementation instead of trusting these dates.
+
+| Item | Evidence |
+| --- | --- |
+| Connector | `uipath-uipath-dataservice` ("UiPath Data Fabric"). |
+| Connection | `b2a02899-3708-4bb6-810a-02321afb77f6`, enabled, in folder `demos`. It is not the default connection, so each Flow must bind it explicitly. |
+| Start trigger | `uipath.connector.trigger.uipath-uipath-dataservice.record-created`, tenant-available. |
+| Mid-flow wait | `uipath.connector.event.uipath-uipath-dataservice.record-updated`, tenant-available. It is a `bpmn:ReceiveTask` with `Intsvc.WaitForEvent`, an `input` handle, and `output` plus `error` handles. It does not replace the start trigger. |
+| Record activities | `create-entity-record`, `get-entity-record-by-id`, `update-entity-record`, `query-entity-records`, `query-multiple-entity-records`, `delete-entity-record`, and file upload/download/delete on record fields. Agent-tool variants of the read activities exist, so an inline agent can read the record through a tool. |
+| Generic trigger configuration | Both nodes are generic triggers. Pass the entity name in `--detail.objectName` when configuring them; the manifest ships that value empty. |
+| Filter fields | Every entity field plus `Id`, `CreateTime`, and `UpdateTime` can be filtered. `EventMode` resolves per entity; the inspected entity returned `webhooks`. |
+
+### Correlation at the wait node
+
+The wait node resumes only for the record that started the Flow. Every selected spec states this design:
+
+1. The record-created trigger emits the record. Its output carries `Id` and every entity field, so the instance holds its own record ID from the first node.
+2. The wait node filters the event on that record ID. Set `inputs.detail.filterExpression` to a `=js:` template that builds the filter from the instance value, for example ``=js:`Id == '${$vars.<triggerNodeId>.output.Id}'` ``. Add a state condition when the demo also needs the reviewer's submitted status.
+3. The wait node therefore fires once, for one case. There is no scan-and-discard loop and no marker field.
+4. After the event fires, read the record with `get-entity-record-by-id` and route from the persisted decision fields. The single-record read is required because `MULTILINE_MAX` fields return only a size marker on list and query reads.
+
+Two authoring details, verified on August 20, 2026:
+
+- `uip maestro flow node configure --detail` refuses `filterExpression` and asks for a structured `filter` tree instead. That builder accepts literal values only and checks field names against trigger metadata, which returned no filter fields for the wait variant of the inspected object. So set `filterExpression` in the node's `inputs.detail` and validate the file. A flow carrying the `=js:` template above passes `uip maestro flow validate`.
+- Static validation is not runtime proof. Confirm during implementation that the event matcher applies the expression per instance, and record the result.
+
+Also state the resumption latency the demo accepts, and wire the wait node's `error` handle so an event failure takes an owned exception route instead of stalling the case.
+
+### Write constraints the app and the Flow must respect
+
+These come from the Data Fabric SDK and API contract and change the design, so state them in the spec:
+
+- Single-record writes (`insertRecordById`, `updateRecordById`) fire trigger events. Bulk writes (`insertRecords`, `updateRecordsById`) do not. Any path that must resume a Flow, including fixture seeding, uses single-record writes.
+- Choice-set fields read and write as integer `numberId` values, never value names. Translate them in both directions.
+- `Id`, `CreateTime`, `UpdateTime`, `CreatedBy`, and `UpdatedBy` are row metadata that cannot be written. Domain timestamps need their own fields with distinct names.
+- Unknown field keys are silently dropped on insert, and required-field checks are case-sensitive. Read the schema and use field names verbatim.
+- `MULTILINE_MAX` fields return a size marker, not content, on list and query reads, and cannot be filtered. Read them with the single-record read, and never write the marker back.
+- Every list call returns one page. Operational tables page through the cursor and show a page size of 25 to 50 with a range summary.
+
+### Coded process-app specification
+
+The app is a coded web app in React and TypeScript. It uses the `@uipath/uipath-typescript` SDK, signs the reviewer in through OAuth PKCE, and deploys independently with `uip codedapp pack`, `publish`, and `deploy`. It is not a solution project and never deploys through `uip solution`, so the spec must pin its name, version, folder, and record contract. Declare it in the solution inventory as an `App` resource, which `uip solution resources add --kind App` supports, so the dependency stays visible.
 
 The coded process-app specification must include:
 
@@ -148,7 +215,7 @@ Every domain spec must include this completed mapping before implementation:
 | Data model | Inputs, canonical record, outputs, correlation ID, persistence/read-back points, and sensitive-data handling. |
 | HITL | Reviewer, coded action app or quick-form rationale, data contract, outcomes, timeout, and resumption path. |
 | Evaluation | Dataset name, 3–5 cases, expected outputs/routes, evaluator type, and success threshold. |
-| Process-app variant | Mark `not selected` or document the Data Fabric/process-app design when the demo is one of the three selected. |
+| Process-app variant | State the closed selection decision. The three selected demos document the full Data Fabric/process-app design; the other six record `not selected` with the queue as canonical record. |
 | Solution boundary | `<domain>/<demo>/<demo>-solution/`, exactly one `.uipx`, nested Flow project layout, globally unique package name, and independent deployment boundary. |
 | Delivery | Resource refresh before pack, immutable package version, and CI validation scoped to the changed solution. |
 

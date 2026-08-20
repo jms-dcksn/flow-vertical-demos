@@ -220,7 +220,7 @@ Evaluation input is synthetic and contains no customer or patient data. The prin
 | MCP server/tool | Template-only server has least-privilege input, no send capability, and required trajectory evaluation. | Contract specified; server ownership/content approval remain. |
 | Data model | Typed input/output, queue canonical demo record, correlation key, eQMS write-back, read-back receipts, audit events, and synthetic/minimized data. | Fully specified for demo; production source of truth/retention remain human decisions. |
 | Evaluation set and evaluator | Five cases plus route, human-authority, clock, trajectory, grounding, isolation, and reconciliation checks. | Initial thresholds specified; evaluator resource IDs/model remain to select and pin. |
-| Process-app variant | Not selected; Orchestrator queue is the canonical demo record and a production eQMS is the intended controlled record. | Later cross-domain decision may change this design. |
+| Process-app variant | Not selected. The Orchestrator queue stays the canonical demo record, and a production eQMS is the intended controlled record. | Closed on August 20, 2026 by decision #56, which selected commercial banking, healthcare provider, and life insurance. No open dependency remains. |
 | Solution boundary and delivery contract | One `medtech-complaint-mdr` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI, Playground target. | Fully specified; folder/resource provisioning and package validation remain. |
 
 ## Open human decisions
@@ -240,7 +240,6 @@ These decisions refine implementation or production substitution but do not bloc
 | Decide whether prior cases may inform recommendations. | Quality, privacy, and regulatory owners | Approve searchable fields, precedent caveats, superseded-decision handling, and access controls. |
 | Select a regulator test boundary. | Regulatory operations and security owners | Approve a validated non-production gateway or retain the schema validator/mock acknowledgement only. |
 | Set manufacturer baselines and target measures. | Vigilance operations owner | Supply observed completeness, timing, concordance, rework, recovery, and on-time submission baselines before benefit claims. |
-| Decide whether Medtech is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 
 ## Implementation tasks
 
