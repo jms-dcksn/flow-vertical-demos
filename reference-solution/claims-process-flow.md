@@ -145,13 +145,19 @@ Verified on August 20, 2026 with `uip` 1.199.0, authenticated as `james.dickson@
 | Generic trigger configuration | Both nodes are generic triggers. Pass the entity name in `--detail.objectName` when configuring them; the manifest ships that value empty. |
 | Filter fields | Every entity field plus `Id`, `CreateTime`, and `UpdateTime` can be filtered. `EventMode` resolves per entity; the inspected entity returned `webhooks`. |
 
-### Correlation constraint at the wait node
+### Correlation at the wait node
 
-Event filters accept literal values only; expressions are not supported. A wait node therefore cannot filter on the running instance's record ID. Every selected spec must state this design:
+The wait node resumes only for the record that started the Flow. Every selected spec states this design:
 
-1. Filter the wait node on a literal state value, for example the choice-set value that the app writes when a reviewer submits a decision. The literal form for a choice field, integer `numberId` or value name, is not verified; confirm it when configuring the node. If a choice field cannot be filtered reliably, add a dedicated boolean marker field and filter on that instead.
-2. After the event fires, compare the payload record ID with the instance's own record ID.
-3. On a mismatch, loop back to the same wait node on a labelled edge. On a match, read the record and route from the returned decision fields.
+1. The record-created trigger emits the record. Its output carries `Id` and every entity field, so the instance holds its own record ID from the first node.
+2. The wait node filters the event on that record ID. Set `inputs.detail.filterExpression` to a `=js:` template that builds the filter from the instance value, for example ``=js:`Id == '${$vars.<triggerNodeId>.output.Id}'` ``. Add a state condition when the demo also needs the reviewer's submitted status.
+3. The wait node therefore fires once, for one case. There is no scan-and-discard loop and no marker field.
+4. After the event fires, read the record with `get-entity-record-by-id` and route from the persisted decision fields. The single-record read is required because `MULTILINE_MAX` fields return only a size marker on list and query reads.
+
+Two authoring details, verified on August 20, 2026:
+
+- `uip maestro flow node configure --detail` refuses `filterExpression` and asks for a structured `filter` tree instead. That builder accepts literal values only and checks field names against trigger metadata, which returned no filter fields for the wait variant of the inspected object. So set `filterExpression` in the node's `inputs.detail` and validate the file. A flow carrying the `=js:` template above passes `uip maestro flow validate`.
+- Static validation is not runtime proof. Confirm during implementation that the event matcher applies the expression per instance, and record the result.
 
 Also state the resumption latency the demo accepts, and wire the wait node's `error` handle so an event failure takes an owned exception route instead of stalling the case.
 
