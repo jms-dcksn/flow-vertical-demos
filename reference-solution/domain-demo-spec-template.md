@@ -105,6 +105,7 @@ metadata, discard the response, and rejoin without changing case state or route.
 | Human decision and returned outcome data | [Mapping] | [Evidence/gap] |
 | Purposeful parallelism and merge | [Mapping or N/A rationale] | [Evidence/gap] |
 | Evaluation set and evaluator | [Mapping] | [Evidence/gap] |
+| Process-app variant | [Selected: point to the Data Fabric/process-app section. Not selected: name the canonical record instead.] | [Closed selection decision and date] |
 | Solution boundary and delivery contract | [Mapping] | [Evidence/gap] |
 
 ## Quality rubric

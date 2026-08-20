@@ -8,7 +8,7 @@
 - **Audience journey:** The demonstrator submits a synthetic recall notice, follows four named canvas segments, opens the evidence-rich review task for an ambiguous candidate, edits and confirms the affected scope, then shows parallel simulated containment and remedy work merging into a reconciled audit summary. Flow is the right surface because the value lies in coordinating deterministic matching, IXP, agents, API and RPA work, and human judgment while keeping normal and exception routes legible.
 - **Success outcome:** Every confirmed SKU and affected channel has the required simulated containment receipt, ambiguous products remain precautionarily blocked until reviewed, customer and remedy artifacts are previews only, and the case closes with source-to-decision-to-receipt lineage.
 - **Measurable value:** Pilot measures are time to first stop-sale, percentage of affected offers blocked, reconciliation completeness, unresolved match count, customer-notification coverage, remedy completion, and overdue action count. The demo does not claim improvement or ROI without retailer baselines.
-- **Out of scope:** Determining or filing a legal duty-to-report submission; regulator negotiation; production customer outreach or refunds; real POS, PIM, ERP, WMS, OMS, CRM, or quality-system writes; unapproved public recall language; non-synthetic customer data; and selecting this domain for the later Data Fabric/process-app variant.
+- **Out of scope:** Determining or filing a legal duty-to-report submission; regulator negotiation; production customer outreach or refunds; real POS, PIM, ERP, WMS, OMS, CRM, or quality-system writes; unapproved public recall language; non-synthetic customer data; and Data Fabric/process-app scope, which decision #56 confirmed is not selected for this domain.
 
 ## Personas
 
@@ -197,7 +197,7 @@ Dataset name: `retail-recall-containment-v1`.
 | Human decision and returned outcome data | Coded action app returns included/excluded IDs, boundaries, rationale, reviewer, approval, and outcome; Flow consumes them downstream. | Contract specified; retailer authority/SLA remain human decisions. |
 | Purposeful parallelism and merge | Stop-sale, quarantine/remedy, and communication-preview branches merge before receipt reconciliation. | Fully specified; required receipt matrix remains to encode. |
 | Evaluation set and evaluator | Five fixtures plus route, match-safety, trajectory, grounded-draft, isolation, and reconciliation checks. | Exact initial thresholds specified; fixtures/evaluators remain to build. |
-| Process-app variant | Not selected. | Later cross-domain selection may change the canonical record/app design. |
+| Process-app variant | Not selected. The Orchestrator queue stays the canonical demo record. | Closed on August 20, 2026 by decision #56, which selected commercial banking, healthcare provider, and life insurance. No open dependency remains. |
 | Solution boundary and delivery contract | One `retail-product-recall-containment` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI. | Fully specified; deployment child folder and remaining resources require provisioning. |
 
 ## Open human decisions
@@ -215,7 +215,6 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 | Choose live CPSC versus cached-fixture demo behavior. | Security/network and demo owners | Approve egress or make the versioned fixture the default with optional live refresh. |
 | Select the exact `JD_Demos/demos` child folder and provision resources. | UiPath tenant administrator | Reuse the verified Azure connection; provision IXP, queue, agents, action app, runtime, and record every binding. |
 | Set pilot baselines and target measures. | Product-safety operations owner | Supply observed timing, reconciliation, coverage, remedy, and aging baselines before making benefit claims. |
-| Decide whether retail is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 
 ## Implementation tasks
 

@@ -200,7 +200,7 @@ Dataset name: `p-c-insurance-catastrophe-property-claim-v1`.
 | Human decision and returned outcome data | Coded action app returns named outcome, edited amount/plan, rationale, reviewer, authority result, and timestamp; Flow consumes them downstream. | Contract specified; authority matrix and production SLA remain human decisions. |
 | Purposeful parallelism and merge | Human-approved claim/payment-request, vendor RPA, and outbox branches merge before receipt reconciliation. | Fully specified; outcome-specific required-receipt matrix remains to encode. |
 | Evaluation set and evaluator | Five fixtures plus route, citation, trajectory, authority, isolation, and reconciliation evaluators with exact initial thresholds. | Fully specified; fixtures/evaluators remain to build. |
-| Process-app variant | Not selected. The queue is the canonical demo record and the coded action app is the review surface. | Later cross-domain selection may change this design. |
+| Process-app variant | Not selected. The queue stays the canonical demo record and the coded action app stays the review surface. | Closed on August 20, 2026 by decision #56, which selected commercial banking, healthcare provider, and life insurance. No open dependency remains. |
 | Solution boundary and delivery contract | One `p-c-insurance-catastrophe-property-claim` solution, one `.uipx`, nested Flow layout, resource refresh, immutable version, changed-solution CI, and deployment beneath `JD_Demos/demos`. | Deployment parent approved; domain resources still require provisioning. |
 
 ## Open human decisions
@@ -218,7 +218,6 @@ These decisions refine implementation but do not block a synthetic, mock-backed 
 | Approve data, privacy, retention, and trace controls. | Privacy, security, and records owners | Confirm allowed fields, residency, masking, image/document handling, access roles, and retention before non-synthetic testing. |
 | Provision the remaining UiPath resources. | UiPath tenant administrator | Deploy beneath the approved `JD_Demos/demos` parent, reuse the verified Azure connection, provision IXP, queue, agents, MCP, action app, and runtime, and record every binding. |
 | Establish pilot baselines and target measures. | Catastrophe claims operations owner | Supply observed timing, routing, touch-time, rework, deadline, override, and failure baselines before making benefit claims. |
-| Decide whether P&C insurance is a Data Fabric/process-app variant. | Demo portfolio owner | Resolve in the later cross-domain selection issue; this spec currently marks it not selected. |
 
 ## Implementation tasks
 
